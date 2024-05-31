@@ -28,7 +28,7 @@ export const checkLogin = async (navigation) => {
 };
 
 
-export const loginStatus = async (navigation) => {
+export const loginStatus = async () => {
   try {
     const token = await AsyncStorage.getItem('Authorization');
     const headers = {
@@ -46,7 +46,6 @@ export const loginStatus = async (navigation) => {
     }
 
     const data = await response.json();
-    console.log(data, "ffdgfdgd");
     if(data.success !== true){
      return false;
     }

@@ -1,6 +1,6 @@
 // Router.js
-import React, { useState } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import React, { useEffect, useState } from 'react';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import HomeScreen from './src/Home/HomeScreen'; // Assuming you have a HomeScreen component
 import ProductScreen from './src/Products/ProductScreen'; // Assuming you have a ProductScreen component
@@ -17,18 +17,22 @@ import SideMenu from 'react-native-side-menu';
 import UserDetailsForm from './src/CheckOut/UserDetailsForm';
 import Wishlist from './src/Wishlist/Wishlist';
 import SearchPage from './component/Search/SearchPage';
+import { checkLogin, loginStatus } from './src/Home/Login/LoginAction';
+import AuthNavigation from './component/Auth/AuthNavigation';
 
 const Stack = createStackNavigator();
 
 const Router = ({ props }) => {
+
   const { isMenuOpen, setIsMenuOpen } = useAppContext();
   const menu = <Menu />;
   const [routeName, setRouteName] = useState("home");
-  console.log(routeName)
+
+
   return (
 
-      <NavigationContainer>
-            <SideMenu menu={menu} isOpen={isMenuOpen} onChange={setIsMenuOpen}>
+    <NavigationContainer>
+      <SideMenu menu={menu} isOpen={isMenuOpen} onChange={setIsMenuOpen}>
         <Stack.Navigator
           initialRouteName="Home"
           screenOptions={{
@@ -55,7 +59,7 @@ const Router = ({ props }) => {
           <Stack.Screen
             name="products"
             component={ProductScreen}
-            initialParams={{ category: "" , type :""}}
+            initialParams={{ category: "", type: "" }}
           />
           <Stack.Screen
             name="productsDetail"
@@ -65,10 +69,11 @@ const Router = ({ props }) => {
             name="category"
             component={Category}
           />
-          <Stack.Screen
+           <Stack.Screen
             name="myorders"
-            component={MyOrders}
-          />
+          >
+            {(props) => <AuthNavigation   {...props} component={MyOrders} />}
+          </Stack.Screen>
           <Stack.Screen
             name="cart"
             component={Cart}
@@ -77,25 +82,25 @@ const Router = ({ props }) => {
             name="addProduct"
             component={AddProduct}
           />
-           <Stack.Screen
+          <Stack.Screen
             name="userDetailsForm"
             component={UserDetailsForm}
           />
-             <Stack.Screen
+          <Stack.Screen
             name="wishlist"
             component={Wishlist}
           />
-           <Stack.Screen 
-          name="Search" 
-          component={SearchPage} 
-          options={{ headerShown: false }} 
-        />
-          
-          
+          <Stack.Screen
+            name="Search"
+            component={SearchPage}
+            options={{ headerShown: false }}
+          />
+
+
         </Stack.Navigator>
-        {routeName != "productsDetail" &&  routeName != "cart" && routeName != "userDetailsForm" && routeName != "Search" && <BottomNavBar />}
-        </SideMenu>
-      </NavigationContainer>
+        {routeName != "productsDetail" && routeName != "cart" && routeName != "userDetailsForm" && routeName != "Search" && <BottomNavBar />}
+      </SideMenu>
+    </NavigationContainer>
     // </SideMenu>
   );
 };

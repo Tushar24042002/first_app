@@ -21,7 +21,7 @@ const App = () => {
     }}>
       <GestureHandlerRootView>
         <Context>
-          <AppUpdate isModalVisible={isModalVisible} setIsModalVisible={setIsModalVisible} />
+          {/* <AppUpdate isModalVisible={isModalVisible} setIsModalVisible={setIsModalVisible} /> */}
           <Router />
         </Context>
       </GestureHandlerRootView>
