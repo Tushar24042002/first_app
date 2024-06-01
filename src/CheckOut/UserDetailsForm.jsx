@@ -10,8 +10,10 @@ import {
 import {getCurrentUser, handleCheckout, handleRazorPay} from './CheckOutAction';
 import {useAppContext} from '../../component/Contexts/Context';
 import RazorpayCheckout from 'react-native-razorpay';
+import {useNavigation} from '@react-navigation/native';
 
 const UserDetailsForm = () => {
+  const navigation = useNavigation();
   const {cart, userDetails, setUserDetails} = useAppContext();
   // const [userDetails, setUserDetails] = useState({
   //   first_name: '',
@@ -37,8 +39,13 @@ const UserDetailsForm = () => {
   };
 
   const setPaymentData = e => {
-    handleRazorPay(e);
-    console.log('end function');
+    handleRazorPay(e).then(res => {
+      navigation.navigate('paymentsuccess', {
+        headerTitle: res?.message,
+        order_id: e.order_id,
+      });
+    });
+    console.log('end function', e);
   };
 
   const startPayment = data => {
@@ -156,7 +163,7 @@ const styles = StyleSheet.create({
     padding: 8,
     borderRadius: 4,
     backgroundColor: '#fff',
-  }
+  },
 });
 
 export default UserDetailsForm;

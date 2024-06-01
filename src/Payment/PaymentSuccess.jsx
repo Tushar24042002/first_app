@@ -1,30 +1,49 @@
 import React from 'react';
-import { View, Text, StyleSheet, FlatList, Image, ScrollView } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
-import { Icon, Button } from 'react-native-elements';
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  Image,
+  ScrollView,
+} from 'react-native';
+import {useNavigation, useRoute} from '@react-navigation/native';
+import {Icon, Button} from 'react-native-elements';
 
 const PaymentSuccess = () => {
   const navigation = useNavigation();
-  const route = useRoute();
+  // const route = useRoute();
   var data = {
     paymentId: 123,
     orderId: 1234,
     address: '123 Main St, Springfield, USA',
     price: '$299.99',
     products: [
-      { id: 1, name: 'Product 1', quantity: 2, price: '$100', imageUrl: 'https://via.placeholder.com/100' },
-      { id: 2, name: 'Product 2', quantity: 1, price: '$199.99', imageUrl: 'https://via.placeholder.com/100' },
+      {
+        id: 1,
+        name: 'Product 1',
+        quantity: 2,
+        price: '$100',
+        imageUrl: 'https://via.placeholder.com/100',
+      },
+      {
+        id: 2,
+        name: 'Product 2',
+        quantity: 1,
+        price: '$199.99',
+        imageUrl: 'https://via.placeholder.com/100',
+      },
     ],
   };
-  const { paymentId, orderId, address, price, products } = data; // Assuming these params are passed from the payment process
+  const {paymentId, orderId, address, price, products} = data; // Assuming these params are passed from the payment process
 
   const handleContinueShopping = () => {
     navigation.navigate('Home');
   };
 
-  const renderProduct = ({ item }) => (
+  const renderProduct = ({item}) => (
     <View style={styles.productContainer}>
-      <Image source={{ uri: item.imageUrl }} style={styles.productImage} />
+      <Image source={{uri: item.imageUrl}} style={styles.productImage} />
       <View style={styles.productDetails}>
         <Text style={styles.productName}>{item.name}</Text>
         <Text style={styles.productQuantity}>Quantity: {item.quantity}</Text>
@@ -37,33 +56,70 @@ const PaymentSuccess = () => {
     <View style={styles.outerContainer}>
       <ScrollView style={styles.container}>
         <View style={styles.iconContainer}>
-          <Icon name="check-circle" type="font-awesome" color="green" size={80} />
+          <Icon
+            name="check-circle"
+            type="font-awesome"
+            color="green"
+            size={80}
+          />
         </View>
         <Text style={styles.successText}>Payment Successful!</Text>
         <Text style={styles.message}>Thank you for your purchase.</Text>
         <View style={styles.infoContainer}>
           <View style={styles.infoRow}>
             <Icon name="id-card" type="font-awesome" color="#333" size={20} />
-            <Text style={styles.detailText}>Payment ID: {paymentId}</Text>
+            <View style={{flexDirection: 'row'}}>
+              <Text style={[styles.detailText, styles.bold500]}>
+                {' '}
+                Payment ID:{' '}
+              </Text>
+              <Text style={styles.detailText}>{paymentId}</Text>
+            </View>
           </View>
+
           <View style={styles.infoRow}>
-            <Icon name="barcode" type="font-awesome" color="#333" size={20} />
-            <Text style={styles.detailText}>Order ID: {orderId}</Text>
+          <Icon name="barcode" type="font-awesome" color="#333" size={20} />
+            <View style={{flexDirection: 'row'}}>
+              <Text style={[styles.detailText, styles.bold500]}>
+              Order ID: 
+              </Text>
+              <Text style={styles.detailText}>{orderId}</Text>
+            </View>
           </View>
+
           <View style={styles.infoRow}>
-            <Icon name="map-marker" type="font-awesome" color="#333" size={20} />
-            <Text style={styles.detailText}>Delivery Address: {address}</Text>
+          <Icon
+              name="map-marker"
+              type="font-awesome"
+              color="#333"
+              size={20}
+            />
+            <View style={{flexDirection: 'row'}}>
+              <Text style={[styles.detailText, styles.bold500]}>
+                {' '}
+                Delivery Address: 
+              </Text>
+              <Text style={styles.detailText}>{address}</Text>
+            </View>
           </View>
+
           <View style={styles.infoRow}>
-            <Icon name="dollar" type="font-awesome" color="#333" size={20} />
-            <Text style={styles.detailText}>Total Price: {price}</Text>
+          <Icon name="dollar" type="font-awesome" color="#333" size={20} />
+            <View style={{flexDirection: 'row'}}>
+              <Text style={[styles.detailText, styles.bold500]}>
+                {' '}
+                Total Price: 
+              </Text>
+              <Text style={styles.detailText}>{price}</Text>
+            </View>
           </View>
+
         </View>
         <Text style={styles.sectionTitle}>Order Products</Text>
         <FlatList
           data={products}
           renderItem={renderProduct}
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={item => item.id.toString()}
         />
       </ScrollView>
       <View style={styles.buttonContainer}>
@@ -88,7 +144,7 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     alignItems: 'center',
-    marginVertical: 20,
+    marginVertical: 10,
   },
   successText: {
     fontSize: 24,
@@ -104,7 +160,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   infoContainer: {
-    marginBottom: 20,
+    marginBottom: 10,
   },
   infoRow: {
     flexDirection: 'row',
@@ -112,16 +168,19 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   detailText: {
-    fontSize: 16,
+    fontSize: 14,
     color: '#333',
     marginLeft: 10,
+  },
+  bold500: {
+    fontWeight: 'bold',
   },
   sectionTitle: {
     fontSize: 18,
     fontWeight: 'bold',
     color: '#333',
-    marginTop: 20,
-    marginBottom: 10,
+    marginTop: 0,
+    marginBottom: 0,
   },
   productContainer: {
     flexDirection: 'row',
@@ -153,7 +212,7 @@ const styles = StyleSheet.create({
     color: '#555',
   },
   buttonContainer: {
-    padding: 20,
+    padding: 10,
     borderTopWidth: 1,
     borderColor: '#ccc',
     backgroundColor: '#fff',

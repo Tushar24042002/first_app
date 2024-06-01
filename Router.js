@@ -20,6 +20,7 @@ import SearchPage from './component/Search/SearchPage';
 import { checkLogin, loginStatus } from './src/Home/Login/LoginAction';
 import AuthNavigation from './component/Auth/AuthNavigation';
 import AdminDashboard from './src/Vendors/Dashboard/AdminDashboard';
+import PaymentSuccess from './src/Payment/PaymentSuccess';
 
 const Stack = createStackNavigator();
 
@@ -98,6 +99,14 @@ const Router = ({ props }) => {
           />
 
 
+{/* payment */}
+
+<Stack.Screen
+            name="paymentsuccess"
+          >
+            {(props) => <AuthNavigation   {...props} component={PaymentSuccess} />}
+          </Stack.Screen>
+
           {/* admin dashboard */}
           <Stack.Screen
             name="admindashboard"
@@ -106,7 +115,7 @@ const Router = ({ props }) => {
           </Stack.Screen>
 
         </Stack.Navigator>
-        {routeName != "productsDetail" && routeName != "cart" && routeName != "userDetailsForm" && routeName != "Search" && <BottomNavBar />}
+        {routeName != "productsDetail" && routeName != "cart" && routeName != "userDetailsForm" && routeName != "Search" && routeName != "paymentsuccess" &&<BottomNavBar />}
       </SideMenu>
     </NavigationContainer>
     // </SideMenu>
