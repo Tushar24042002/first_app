@@ -16,11 +16,19 @@ import {shortLength} from '../Constants/Utils';
 import {useNavigation} from '@react-navigation/native';
 import ImageCarousel from '../ProductDetails/ImageCarousel';
 import {useAppContext} from '../../component/Contexts/Context';
-import { getCart, getWishList } from '../Cart/CartAction';
+import {getCart, getWishList} from '../Cart/CartAction';
+import {getCurrentUser} from '../CheckOut/CheckOutAction';
 
 const HomeScreen = ({route}) => {
   const [isLoginModal, setIsLoginModal] = useState(false);
-  const {productCategory, setProductCategory, setIsMenuOpen , setCart, setWishlistData} = useAppContext();
+  const {
+    productCategory,
+    setProductCategory,
+    setIsMenuOpen,
+    setCart,
+    setWishlistData,
+    setUserDetails,
+  } = useAppContext();
   const {id} = route.params;
   const navigation = useNavigation();
   const bounceAnim = useRef(new Animated.Value(0)).current;
@@ -49,7 +57,8 @@ const HomeScreen = ({route}) => {
   }, [route]);
 
   const handleLoginModal = () => {
-        setIsLoginModal(false);
+    setIsLoginModal(false);
+    getCurrentUser(setUserDetails);
   };
   console.log(isLoginModal);
   const renderCategoryItem = ({item}) => (
@@ -60,7 +69,7 @@ const HomeScreen = ({route}) => {
         navigation.navigate('products', {
           headerTitle: item?.type_name,
           type: item?.type_name,
-          category :""
+          category: '',
         })
       }>
       <View style={styles.imageContainer}>

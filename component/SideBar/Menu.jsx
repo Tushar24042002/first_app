@@ -9,16 +9,18 @@ import {
   Button,
 } from 'react-native';
 import {loginStatus} from '../../src/Home/Login/LoginAction';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Menu = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigation = useNavigation();
-
+  const data = AsyncStorage.getItem('user');
+  console.log(data, "user data");
   useEffect(() => {
-    loginStatus(navigation).then((res)=>{
-      console.log(res,"dsfsdfsnfj")
+    loginStatus(navigation).then(res => {
+      console.log(res, 'dsfsdfsnfj');
       setIsLoggedIn(res);
-    })
+    });
   });
   return (
     <View style={menuStyles.container}>
@@ -40,8 +42,13 @@ const Menu = () => {
       </View>
       {isLoggedIn ? (
         <>
-          <TouchableOpacity onPress={() => alert('Menu Item 1 pressed')}>
-            <Text style={menuStyles.item}>Menu Item 1</Text>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate('admindashboard', {
+                headerTitle: 'Admin Dashboard',
+              })
+            }>
+            <Text style={menuStyles.item}>Admin Dashboard</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => alert('Menu Item 2 pressed')}>
             <Text style={menuStyles.item}>Menu Item 2</Text>

@@ -19,6 +19,7 @@ import Wishlist from './src/Wishlist/Wishlist';
 import SearchPage from './component/Search/SearchPage';
 import { checkLogin, loginStatus } from './src/Home/Login/LoginAction';
 import AuthNavigation from './component/Auth/AuthNavigation';
+import AdminDashboard from './src/Vendors/Dashboard/AdminDashboard';
 
 const Stack = createStackNavigator();
 
@@ -96,6 +97,13 @@ const Router = ({ props }) => {
             options={{ headerShown: false }}
           />
 
+
+          {/* admin dashboard */}
+          <Stack.Screen
+            name="admindashboard"
+          >
+            {(props) => <AuthNavigation   {...props} component={AdminDashboard} />}
+          </Stack.Screen>
 
         </Stack.Navigator>
         {routeName != "productsDetail" && routeName != "cart" && routeName != "userDetailsForm" && routeName != "Search" && <BottomNavBar />}

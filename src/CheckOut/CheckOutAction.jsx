@@ -59,6 +59,7 @@ export const getCurrentUser = async setUserDetails => {
     console.log(data, 'res');
     if (data?.success) {
       setUserDetails(data?.userDetails);
+      AsyncStorage.setItem("user",JSON.stringify(data?.userDetails));
     }
   } catch (error) {
     throw new Error(
