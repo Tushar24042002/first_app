@@ -20,7 +20,6 @@ import {USER_LOGIN, USER_REGISTER} from '../../Constants/Consts';
 import {validateEmail} from '../../Constants/ValidationFile';
 const height = Dimensions.get('window').height;
 const LoginModal = ({isLoginModal, handleLoginModal}) => {
-  console.log("working")
   const [userLevel, setUserLevel] = useState(USER_LOGIN);
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');

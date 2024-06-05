@@ -75,6 +75,7 @@ const ProductDetail = ({route}) => {
           {product?.description}
         </Text>
         <Text>Type - {product?.product_type?.name}</Text>
+        <Text>Category - {product?.product_category?.name}</Text>
         {product?.description?.length > 60 && (
           <TouchableOpacity onPress={handleOpenDescModal}>
             <Text style={styles.readMore}>Read More</Text>

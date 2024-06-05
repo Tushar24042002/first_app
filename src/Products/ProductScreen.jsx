@@ -1,10 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import {Pressable, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {Button, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {fetchProducts} from './ProductAction';
 import Product from '../../component/Product/Product';
 import SortingModal from './SortingModal';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useNavigation } from '@react-navigation/native';
 
 const ProductScreen = ({route}) => {
+  const navigation = useNavigation();
   const [staticProducts, setStaticProducts] = useState([]);
   const [products, setProducts] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
@@ -37,7 +40,17 @@ const ProductScreen = ({route}) => {
   };
   return (
     <ScrollView contentContainerStyle={styles.container}>
+             {/* </CustomModal> */}
+    
+    {products && <View style={{   flex: 1, width : "100%"}}>
+     <TouchableOpacity style={styles.filterButton} onPress={() => setModalVisible(true)}>
+        <Text style={styles.filterButtonText}>Sorting & Filter</Text>
+      </TouchableOpacity>
+     </View>
+}
       <View style={styles.productContainer}>
+  
+
         {products &&
           products?.map(
             (product, index) => (
@@ -45,21 +58,18 @@ const ProductScreen = ({route}) => {
               (<Product key={index} product={product} />)
             ),
           )}
-        {!products && <Text>No Product Found</Text>}
+        {!products &&   <View style={styles.emptyContainer}>
+          <Ionicons name="product-outline" size={100} color="#ccc" />
+          <Text style={styles.emptyText}>No Products</Text>
+          <Button title='Reset Filter' onPress={() => navigation.navigate('products', { headerTitle: 'Products' , type :"", category :"" })} />
+        </View>}
       </View>
-
-      {/* </CustomModal> */}
       <SortingModal
         setProducts={setProducts}
         products={products}
         isVisible={modalVisible}
         setIsVisible={setModalVisible}
       />
-      <Pressable
-        style={[styles.button, styles.buttonOpen]}
-        onPress={() => setModalVisible(true)}>
-        <Text style={styles.textStyle}>Show Modal</Text>
-      </Pressable>
     </ScrollView>
   );
 };
@@ -75,6 +85,29 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     justifyContent: 'space-between',
     width: '100%',
+  },
+  filterButton: {
+    backgroundColor: 'blue',
+    padding: 6,
+    borderRadius: 10,
+    marginVertical : 10,
+    marginLeft: 20,
+    marginRight: 20,
+    alignItems: 'center',
+  },
+  filterButtonText: {
+    color: 'white',
+    fontSize: 16,
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  emptyText: {
+    fontSize: 18,
+    color: '#888',
+    marginVertical: 10,
   },
 });
 

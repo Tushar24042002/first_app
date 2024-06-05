@@ -87,12 +87,13 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   rating: {
-    width: 50,
+    width: 42,
     backgroundColor: 'green',
     // paddingHorizontal : 6,
     paddingLeft: 8,
     paddingVertical: 2,
     borderRadius: 20,
+    textAlign : "center"
   },
   wishlistIcon: {
     position: 'absolute',

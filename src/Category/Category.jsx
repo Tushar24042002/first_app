@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {fetchSubCategory, getCategory, getSubCategory} from './CategoryAction';
 import TextComponent from '../../component/Text/TextComponent';
 import {
@@ -7,10 +7,13 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
+  Text,
 } from 'react-native';
 import {useAppContext} from '../../component/Contexts/Context';
+import {useNavigation} from '@react-navigation/native';
 
 const Category = () => {
+  const navigation = useNavigation();
   const {
     productCategory,
     setProductCategory,
@@ -19,14 +22,17 @@ const Category = () => {
   } = useAppContext();
 
   const [selectedCategory, setSelectedCategory] = useState({});
-  const [selectedSubcategory, setSelectedSubcategory] = useState({});
 
   const handleCategoryClick = category => {
     setSelectedCategory(category);
   };
 
-  const handleSubcategoryClick = subcategory => {
-    setSelectedSubcategory(subcategory);
+  const handleSubcategoryClick = (subName, type) => {
+    navigation.navigate('products', {
+      headerTitle: subName,
+      category: subName,
+      type: type,
+    });
   };
 
   useEffect(() => {
@@ -50,68 +56,97 @@ const Category = () => {
   }, [productCategory]);
 
   return (
-    <ScrollView style={{flex: 1}}>
-      <View style={styles.container}>
-        <View style={styles.categoryContainer}>
-          {productCategory &&
-            productCategory.map(category => (
+    <View style={{flex: 1, flexDirection: 'row'}}>
+      <ScrollView style={styles.categoryContainer}>
+        {productCategory &&
+          productCategory.map(category => (
+            <TouchableOpacity
+              key={category.id}
+              onPress={() => handleCategoryClick(category)}
+              style={styles.categoryItem}>
+              <Image
+                source={{
+                  uri: category.image || 'https://via.placeholder.com/80',
+                }}
+                style={styles.categoryImage}
+              />
+              <Text style={styles.categoryText}>{category.type_name}</Text>
+            </TouchableOpacity>
+          ))}
+      </ScrollView>
+
+      <ScrollView contentContainerStyle={styles.subCategoryContainer}>
+        <View style={styles.subCategoryGrid}>
+          {productSubCategory &&
+            productSubCategory.map(subcategory => (
               <TouchableOpacity
-                key={category.id}
-                onPress={() => handleCategoryClick(category)}
-                style={styles.categoryItem}>
+                key={subcategory?.id}
+                onPress={() =>
+                  handleSubcategoryClick(
+                    subcategory?.category_name,
+                    selectedCategory?.type_name,
+                  )
+                }
+                style={styles.subcategoryItem}>
                 <Image
-                  source={{uri: category.image}}
-                  style={styles.categoryImage}
+                  source={{
+                    uri: subcategory.image || 'https://via.placeholder.com/80',
+                  }}
+                  style={styles.subcategoryImage}
                 />
-                <TextComponent>{category.type_name}</TextComponent>
+                <Text style={styles.subcategoryText}>
+                  {subcategory?.category_name}
+                </Text>
               </TouchableOpacity>
             ))}
         </View>
-
-        <View style={styles.subCategoryContainer}>
-          {productSubCategory &&
-            productSubCategory.map(subcategory => (
-              <TextComponent
-                key={subcategory?.id}
-                onClick={() => handleSubcategoryClick(subcategory)}
-                style={styles.subcategoryText}>
-                {subcategory?.category_name}
-              </TextComponent>
-            ))}
-        </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'row',
-  },
   categoryContainer: {
-    flex: 1,
-    width: '33%',
+    width: '45%',
     padding: 10,
   },
   subCategoryContainer: {
-    flex: 2,
+    width: '100%',
     padding: 10,
   },
-  categoryText: {
-    marginBottom: 10,
-  },
-  subcategoryText: {
-    marginBottom: 10,
+  subCategoryGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
   },
   categoryItem: {
     marginBottom: 10,
-    marginRight: 10,
+    alignItems: 'center',
+  },
+  subcategoryItem: {
+    width: '48%', // Ensure two items per row
+    marginBottom: 15,
+    alignItems: 'center',
   },
   categoryImage: {
-    width: 100,
-    height: 100,
+    width: 80,
+    height: 80,
+    borderRadius: 40,
     resizeMode: 'cover',
+    marginBottom: 10,
+  },
+  subcategoryImage: {
+    width: 80,
+    height: 80,
+    resizeMode: 'cover',
+    borderRadius: 40,
+    marginBottom: 10,
+  },
+  categoryText: {
+    textAlign: 'center',
+  },
+  subcategoryText: {
+    textAlign: 'center',
   },
 });
 
