@@ -1,93 +1,91 @@
 // screens/AdminDashboard.js
-import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, ScrollView } from 'react-native';
-import { useAppContext } from '../../../component/Contexts/Context';
-
-// Mock Data
-const products = [
-  { id: '1', name: 'Product 1' },
-  { id: '2', name: 'Product 2' },
-  { id: '3', name: 'Product 3' },
-  // Add more products as needed
-];
-
-const users = [
-  { id: '1', name: 'John Doe', email: 'john@example.com' },
-  { id: '2', name: 'Jane Smith', email: 'jane@example.com' },
-  // Add more users as needed
-];
-
-const payments = [
-  { id: '1', amount: 100, date: '2023-05-01' },
-  { id: '2', amount: 150, date: '2023-05-15' },
-  { id: '3', amount: 200, date: '2023-05-20' },
-  // Add more payments as needed
-];
-
-const orders = [
-  { id: '1', status: 'delivered' },
-  { id: '2', status: 'pending' },
-  { id: '3', status: 'delivered' },
-  // Add more orders as needed
-];
-
-// Helper functions to calculate metrics
-const getTotalPayments = () => payments.reduce((sum, payment) => sum + payment.amount, 0);
-const getMonthlyPayments = (month) => payments
-  .filter(payment => new Date(payment.date).getMonth() + 1 === month)
-  .reduce((sum, payment) => sum + payment.amount, 0);
-const getDeliveredOrdersCount = () => orders.filter(order => order.status === 'delivered').length;
+import React, {useEffect, useState} from 'react';
+import {View, Text, StyleSheet, FlatList, ScrollView, TouchableOpacity} from 'react-native';
+import {useAppContext} from '../../../component/Contexts/Context';
+import {getDashboardData} from './DashboardAction';
+import { useNavigation } from '@react-navigation/native';
 
 function AdminDashboard() {
-  const { setIsMenuOpen } = useAppContext();
+  const {setIsMenuOpen} = useAppContext();
+  const navigation = useNavigation();
+  const [dashboardData, setDashboardData] = useState({});
 
   useEffect(() => {
     setIsMenuOpen(false);
+    fetchData();
   }, []);
+
+  const fetchData = () => {
+    getDashboardData().then(res => {
+      console.log(res);
+      setDashboardData(res);
+    });
+  };
 
   return (
     <ScrollView style={styles.container}>
-
       <View style={styles.row}>
+        {
+          dashboardData?.total_users != null &&
         <View style={[styles.card, styles.blueCard]}>
-          <Text style={[styles.cardTitle, styles.cardTitleBlue]}>Total Products</Text>
-          <Text style={[styles.cardValue, styles.cardValueBlue]}>{products.length}</Text>
-        </View>
+          <Text style={[styles.cardTitle, styles.cardTitleBlue]}>
+            Total Users
+          </Text>
+          <Text style={[styles.cardValue, styles.cardValueBlue]}>
+            {dashboardData?.total_users}
+          </Text>
+        </View>}
+        {
+          dashboardData?.total_vendors != null &&
         <View style={[styles.card, styles.purpleCard]}>
-          <Text style={[styles.cardTitle, styles.cardTitlePurple]}>Total Users</Text>
-          <Text style={[styles.cardValue, styles.cardValuePurple]}>{users.length}</Text>
+          <Text style={[styles.cardTitle, styles.cardTitlePurple]}>
+            Total Vendors
+          </Text>
+          <Text style={[styles.cardValue, styles.cardValuePurple]}>
+            {dashboardData?.total_vendors}
+          </Text>
         </View>
+}
       </View>
 
       <View style={styles.row}>
-        <View style={[styles.card, styles.greenCard]}>
-          <Text style={[styles.cardTitle, styles.cardTitleGreen]}>Total Payments</Text>
-          <Text style={[styles.cardValue, styles.cardValueGreen]}>${getTotalPayments()}</Text>
-        </View>
-        <View style={[styles.card, styles.orangeCard]}>
-          <Text style={[styles.cardTitle, styles.cardTitleOrange]}>Monthly Payments</Text>
-          <Text style={[styles.cardValue, styles.cardValueOrange]}>${getMonthlyPayments(new Date().getMonth() + 1)}</Text>
-        </View>
-      </View>
-
-      <View style={styles.row}>
-        <View style={[styles.card, styles.redCard]}>
-          <Text style={[styles.cardTitle, styles.cardTitleRed]}>Delivered Orders</Text>
-          <Text style={[styles.cardValue, styles.cardValueRed]}>{getDeliveredOrdersCount()}</Text>
-        </View>
-      </View>
-
-      <FlatList
-        data={users}
-        renderItem={({ item }) => (
-          <View style={styles.userItem}>
-            <Text style={styles.userName}>{item.name}</Text>
-            <Text style={styles.userEmail}>{item.email}</Text>
+        {dashboardData?.total_payments != null && (
+          <View style={[styles.card, styles.greenCard]}>
+            <Text style={[styles.cardTitle, styles.cardTitleGreen]}>
+              Total Payments
+            </Text>
+            <Text style={[styles.cardValue, styles.cardValueGreen]}>
+              {dashboardData?.total_payments}
+            </Text>
           </View>
         )}
-        keyExtractor={(item) => item.id}
-        style={styles.userList}
-      />
+        {
+          dashboardData?.total_products != null &&
+        <TouchableOpacity onPress={()=>navigation.navigate('adminproducts')} style={[styles.card, styles.orangeCard]}>
+          <Text style={[styles.cardTitle, styles.cardTitleOrange]}>
+            Total Products
+          </Text>
+          <Text style={[styles.cardValue, styles.cardValueOrange]}>
+            {dashboardData?.total_products}
+          </Text>
+        </TouchableOpacity>
+}
+      </View>
+
+      <View style={styles.row}>
+        {dashboardData?.total_orders != null && (
+          <View style={[styles.card, styles.redCard]}>
+            <Text style={[styles.cardTitle, styles.cardTitleRed]}>
+              Delivered Orders
+            </Text>
+            <Text style={[styles.cardValue, styles.cardValueRed]}>
+              {' '}
+              {dashboardData?.total_orders}
+            </Text>
+          </View>
+        )}
+      </View>
+
     </ScrollView>
   );
 }
@@ -108,7 +106,7 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 8,
     marginHorizontal: 8,
-    cursor :"pointer"
+    cursor: 'pointer',
   },
   blueCard: {
     backgroundColor: '#4169E1',

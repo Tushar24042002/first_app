@@ -20,7 +20,7 @@ const BottomNavBar = () => {
         <MaterialIcons name="category" size={24} color="black" />
         <Text style={{fontSize : 10, color : "grey"}}>Category</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('paymentsuccess' , { headerTitle: 'My Orders' })} style={styles.button}>
+      <TouchableOpacity onPress={() => navigation.navigate('myorders' , { headerTitle: 'My Orders' })} style={styles.button}>
         <Ionicons name="cube" size={24} color="black" />
         <Text style={{fontSize : 10, color : "grey"}}>My Orders</Text>
       </TouchableOpacity>

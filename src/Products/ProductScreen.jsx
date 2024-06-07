@@ -1,10 +1,20 @@
 import React, {useEffect, useState} from 'react';
-import {Button, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Button,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {fetchProducts} from './ProductAction';
 import Product from '../../component/Product/Product';
 import SortingModal from './SortingModal';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
+import {useDispatch, useSelector} from 'react-redux';
+import {allproducts} from '../Redux/action/productAction';
 
 const ProductScreen = ({route}) => {
   const navigation = useNavigation();
@@ -13,9 +23,19 @@ const ProductScreen = ({route}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const {type} = route.params;
   const {category} = route.params;
+  const dispatch = useDispatch();
+
+  const data = useSelector(state => state);
+  console.log('data', data);
 
   useEffect(() => {
-    fetchDataFromAPI();
+    if (data.products?.length === 0) {
+      console.log("fetching")
+      fetchDataFromAPI();
+    }
+    else{
+      setProducts(data?.products?.products);
+    }
   }, []);
 
   useEffect(() => {
@@ -25,7 +45,7 @@ const ProductScreen = ({route}) => {
   const fetchDataFromAPI = async () => {
     try {
       const result = await fetchProducts(type, category);
-
+      dispatch(allproducts(result?.products));
       setProducts(result?.products);
       setStaticProducts(result?.products);
     } catch (error) {
@@ -35,22 +55,22 @@ const ProductScreen = ({route}) => {
   };
 
   const changeImageUrl = imgArr => {
-    console.log(imgArr);
     return imgArr?.map(url => url.replace('http://', 'https://'));
   };
   return (
     <ScrollView contentContainerStyle={styles.container}>
-             {/* </CustomModal> */}
-    
-    {products && <View style={{   flex: 1, width : "100%"}}>
-     <TouchableOpacity style={styles.filterButton} onPress={() => setModalVisible(true)}>
-        <Text style={styles.filterButtonText}>Sorting & Filter</Text>
-      </TouchableOpacity>
-     </View>
-}
-      <View style={styles.productContainer}>
-  
+      {/* </CustomModal> */}
 
+      {products && (
+        <View style={{flex: 1, width: '100%'}}>
+          <TouchableOpacity
+            style={styles.filterButton}
+            onPress={() => setModalVisible(true)}>
+            <Text style={styles.filterButtonText}>Sorting & Filter</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+      <View style={styles.productContainer}>
         {products &&
           products?.map(
             (product, index) => (
@@ -58,11 +78,22 @@ const ProductScreen = ({route}) => {
               (<Product key={index} product={product} />)
             ),
           )}
-        {!products &&   <View style={styles.emptyContainer}>
-          <Ionicons name="product-outline" size={100} color="#ccc" />
-          <Text style={styles.emptyText}>No Products</Text>
-          <Button title='Reset Filter' onPress={() => navigation.navigate('products', { headerTitle: 'Products' , type :"", category :"" })} />
-        </View>}
+        {!products && (
+          <View style={styles.emptyContainer}>
+            <Ionicons name="product-outline" size={100} color="#ccc" />
+            <Text style={styles.emptyText}>No Products</Text>
+            <Button
+              title="Reset Filter"
+              onPress={() =>
+                navigation.navigate('products', {
+                  headerTitle: 'Products',
+                  type: '',
+                  category: '',
+                })
+              }
+            />
+          </View>
+        )}
       </View>
       <SortingModal
         setProducts={setProducts}
@@ -90,7 +121,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'blue',
     padding: 6,
     borderRadius: 10,
-    marginVertical : 10,
+    marginVertical: 10,
     marginLeft: 20,
     marginRight: 20,
     alignItems: 'center',

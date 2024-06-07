@@ -18,6 +18,7 @@ import ImageCarousel from '../ProductDetails/ImageCarousel';
 import {useAppContext} from '../../component/Contexts/Context';
 import {getCart, getWishList} from '../Cart/CartAction';
 import {getCurrentUser} from '../CheckOut/CheckOutAction';
+import HorizontalProducts from './HorizontalProducts';
 
 const HomeScreen = ({route}) => {
   const [isLoginModal, setIsLoginModal] = useState(false);
@@ -101,6 +102,9 @@ const HomeScreen = ({route}) => {
             horizontal
             contentContainerStyle={styles.categoryContainer}
           />
+
+          <HorizontalProducts />
+
           {isLoginModal && (
             <LoginModal
               isLoginModal={isLoginModal}
@@ -120,15 +124,17 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: 'white',
     height: '100%',
+    backgroundColor: '#ffffff',
   },
   categoryContainer: {
     // flexGrow: 1,
-    height: 80,
+    height: 100,
     paddingHorizontal: 10,
     marginVertical: 10,
   },
   categoryItem: {
     marginRight: 10,
+    marginTop : 12,
     alignItems: 'center',
   },
   imageContainer: {

@@ -1,25 +1,28 @@
-// reducers/userReducer.js
+import { LOGIN_DETAILS, USER_DETAILS, loginDetails } from "../action/userAction";
+
+// reducers/productReducer.js
 const initialState = {
-  firstName: '',
-  lastName: '',
-  mobile: '',
-  email: '',
-  address: '',
-  pincode: '',
-  city: '',
-  state: '',
-};
+    user: {},
+    loginData : {}
+  };
+  
+  const userReducer = (state = initialState, action) => {
+    switch (action.type) {
+      case USER_DETAILS:
+        return {
+          ...state,
+          user: action.payload,
+        };
 
-const userReducer = (state = initialState, action) => {
-  switch (action.type) {
-    case 'UPDATE_USER':
-      return {
-        ...state,
-        ...action.payload,
-      };
-    default:
-      return state;
-  }
-};
-
-export default userReducer;
+        case LOGIN_DETAILS:
+          return{
+            ...state,
+            loginData : action.payload
+          }
+      default:
+        return state;
+    }
+  };
+  
+  export default userReducer;
+  

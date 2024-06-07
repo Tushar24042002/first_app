@@ -1,13 +1,13 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
+  import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export const getOrders = async () => {
+export const getDashboardData = async () => {
     try {
       const token = await AsyncStorage.getItem('Authorization');
       const headers = {
         'Authorization': `${token}`,
         'Content-Type': 'application/json', // Optional, adjust as needed
       };
-      const response = await fetch('https://prediction.capitallooks.com/php_backend/Orders/get_all_order_user_id.php', {
+      const response = await fetch('https://prediction.capitallooks.com/php_backend/admin_dashboard/dashboard.php', {
         method: 'GET',
         headers: headers,
       });

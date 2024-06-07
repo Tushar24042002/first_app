@@ -18,6 +18,8 @@ import {useNavigation} from '@react-navigation/native';
 import {ALERT_TYPE, Toast} from 'react-native-alert-notification';
 import {USER_LOGIN, USER_REGISTER} from '../../Constants/Consts';
 import {validateEmail} from '../../Constants/ValidationFile';
+import { useDispatch } from 'react-redux';
+import { loginDetails } from '../../Redux/action/userAction';
 const height = Dimensions.get('window').height;
 const LoginModal = ({isLoginModal, handleLoginModal}) => {
   const [userLevel, setUserLevel] = useState(USER_LOGIN);
@@ -30,7 +32,7 @@ const LoginModal = ({isLoginModal, handleLoginModal}) => {
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
   const [keyboardHeight, setKeyboardHeight] = useState(0);
   const navigation = useNavigation();
-
+const dispatch = useDispatch();
   useEffect(() => {
     checkLogin();
   }, []);
@@ -70,6 +72,7 @@ const LoginModal = ({isLoginModal, handleLoginModal}) => {
             });
             clearInputs();
           } else if (res?.success) {
+            dispatch(loginDetails(res));
             await AsyncStorage.setItem('Authorization', res?.authToken);
             Toast.show({
               type: ALERT_TYPE.SUCCESS,

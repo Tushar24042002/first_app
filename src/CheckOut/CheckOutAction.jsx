@@ -1,4 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useDispatch } from 'react-redux';
+import { userDetails } from '../Redux/action/userAction';
 
 export const handleCheckout = async (amount, cartArray, userDetails) => {
   try {
@@ -36,6 +38,7 @@ export const handleCheckout = async (amount, cartArray, userDetails) => {
 };
 
 export const getCurrentUser = async setUserDetails => {
+  const dispatch = useDispatch();
   try {
     const token = await AsyncStorage.getItem('Authorization');
     const headers = {
@@ -58,6 +61,7 @@ export const getCurrentUser = async setUserDetails => {
     const data = await response.json();
     console.log(data, 'res');
     if (data?.success) {
+      dispatch(userDetails(data?.userDetails));
       setUserDetails(data?.userDetails);
       AsyncStorage.setItem("user",JSON.stringify(data?.userDetails));
     }

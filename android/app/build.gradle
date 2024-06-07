@@ -82,8 +82,8 @@ android {
         applicationId "com.dukan"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 10
-        versionName "1.0.10"
+        versionCode 13  
+        versionName "1.0.13"
     }
     signingConfigs {
         release {
@@ -137,3 +137,4 @@ dependencies {
 }
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
+apply plugin: 'com.google.gms.google-services' // Add this line at the bottom

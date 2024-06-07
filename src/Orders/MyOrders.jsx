@@ -16,13 +16,11 @@ const MyOrders = () => {
 
   useEffect(() => {
     getOrders().then(res => {
-      console.log(res, 'data');
       setOrders(res?.orders);
     });
   }, []);
 
   const renderOrder = ({item}) => (
-    console.log(item),
     <View style={styles.orderContainer}>
       <View style={styles.orderDetails}>
         <Image source={{uri: item.product_images}} style={styles.productImage} />
@@ -41,7 +39,6 @@ const MyOrders = () => {
   );
 
   const handleAddToCart = item => {
-    // Implement add to cart functionality here
     console.log('Add to cart:', item);
   };
 

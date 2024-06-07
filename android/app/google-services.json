@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "329863991159",
+    "project_id": "dukan-app-78c7c",
+    "storage_bucket": "dukan-app-78c7c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:329863991159:android:485b98715acd97e6fe9b72",
+        "android_client_info": {
+          "package_name": "com.dukan"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC2jb4UiRL-xhAb9IUm_X70mleWlzSVqCw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
