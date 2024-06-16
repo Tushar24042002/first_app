@@ -1,12 +1,13 @@
 package com.dukan
 
-import android.content.pm.PackageManager
 import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Bundle
 import androidx.core.app.ActivityCompat
-
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate
 import com.facebook.react.ReactRootView
+import org.devio.rn.splashscreen.SplashScreen
 
 class MainActivity : ReactActivity() {
 
@@ -18,6 +19,11 @@ class MainActivity : ReactActivity() {
         return ReactRootView(this@MainActivity)
       }
     }
+  }
+
+  override fun onCreate(savedInstanceState: Bundle?) {
+    SplashScreen.show(this)
+    super.onCreate(savedInstanceState)
   }
 
   override fun onResume() {

@@ -12,27 +12,57 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useAppContext } from '../../component/Contexts/Context';
 import { checkLogin } from '../Home/Login/LoginAction';
 import { useNavigation } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
+import { addCart, getCart } from './CartAction';
+import {Toast} from 'react-native-alert-notification';
+import {ALERT_TYPE} from '../Constants/Consts';
 
 const Cart = () => {
   const { cart, setCart } = useAppContext();
   const navigation = useNavigation();
 
+  const {user} = useSelector((state)=>state);
   useEffect(() => {
-    checkLogin(navigation);
+    if(user?.loginData == null ||  user?.loginData?.success === undefined){
+      navigation.navigate('home', { headerTitle: "Home", id: 1 })
+    }
+
   }, []);
 
   const increaseQuantity = index => {
-    const newCarts = [...cart];
-    newCarts[index].quantity += 1;
-    setCart(newCarts);
+    addToCart(cart[index]?.product_id, 1);
   };
 
   const decreaseQuantity = index => {
-    const newCarts = [...cart];
-    if (newCarts[index].quantity > 1) {
-      newCarts[index].quantity -= 1;
-      setCart(newCarts);
-    }
+    addToCart(cart[index]?.product_id, -1);
+  };
+
+
+  const addToCart = (productId,quantity ) => {
+    let obj = {
+      product_id: productId,
+      quantity: quantity,
+    };
+    addCart(obj, navigation)
+      .then(res => {
+        console.log(res)
+        if (res?.success) {
+          getCart(setCart);
+          Toast.show({
+            type: ALERT_TYPE.SUCCESS,
+            title: res?.message,
+          });
+        } else {
+          Toast.show({
+            type: ALERT_TYPE.DANGER,
+            title: 'Add to Cart Failed',
+            textBody: res?.error,
+          });
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
   };
 
   return (
@@ -80,8 +110,8 @@ const Cart = () => {
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           style={styles.bottomButton}
-          onPress={() => navigation.navigate('userDetailsForm', { headerTitle: 'User Details' })}>
-          <Text style={styles.buttonText}>Check Out</Text>
+          onPress={() =>{cart?.length > 0 ? navigation.navigate('userDetailsForm', { headerTitle: 'User Details' }) : navigation.navigate('products', { headerTitle: 'Products' , type :"", category :"" })}}>
+          <Text style={styles.buttonText}>{cart?.length > 0 ? "Check Out" : "Continue Shopping"}</Text>
         </TouchableOpacity>
       </View>
     </View>

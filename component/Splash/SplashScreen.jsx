@@ -7,7 +7,7 @@ const SplashScreen = () => {
   return (
     <View style={styles.container}>
       <Image
-        source={require('../../android/app/src/main/res/drawable/splash_screen.png')}
+        source={require('../../android/app/src/main/res/drawable/splash.png')}
         style={styles.image}
         resizeMode="contain"
       />

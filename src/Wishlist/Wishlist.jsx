@@ -10,22 +10,47 @@ import {
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useAppContext } from '../../component/Contexts/Context';
-import { checkLogin } from '../Home/Login/LoginAction';
 import { useNavigation } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
+import { getWishList, removeWishlist } from '../Cart/CartAction';
+import { ALERT_TYPE, Toast } from 'react-native-alert-notification';
 
 const Wishlist = () => {
   const { wishlistData, setWishlistData } = useAppContext();
+
   const navigation = useNavigation();
 
+  const {user} = useSelector((state)=>state);
   useEffect(() => {
-    checkLogin(navigation);
+    if(user?.loginData == null ||  user?.loginData?.success === undefined){
+      navigation.navigate('home', { headerTitle: "Home", id: 1 })
+    }
+
   }, []);
 
-  const removeFromWishlist = (index) => {
-    const newWishlist = [...wishlistData];
-    newWishlist.splice(index, 1);
-    setWishlistData(newWishlist);
+
+
+  const removeFromWishlist = prodId => {
+    let obj = {
+      product_id: prodId,
+    };
+    removeWishlist(obj).then((res)=>{
+      if (res?.success) {
+        getWishList(setWishlistData);
+        Toast.show({
+          type: ALERT_TYPE.SUCCESS,
+          title: res?.message,
+        });
+      } else {
+        Toast.show({
+          type: ALERT_TYPE.DANGER,
+          title: 'Add to Cart Failed',
+          textBody: res?.error,
+        });
+      }
+    });
   };
+
   return (
     <View style={styles.container}>
       {wishlistData === undefined || wishlistData.length === 0 ? (
@@ -50,8 +75,8 @@ const Wishlist = () => {
                   <FontAwesome name="rupee" size={14} color="black" />
                   {wishlistItem.price}
                 </Text>
-                <TouchableOpacity onPress={() => removeFromWishlist(index)}>
-                  <Ionicons name="heart" size={24} color="red" />
+                <TouchableOpacity onPress={() => removeFromWishlist(wishlistItem?.product_id)}>
+                  <Ionicons name="heart-dislike-outline" size={24} color="red" />
                 </TouchableOpacity>
               </View>
             </View>

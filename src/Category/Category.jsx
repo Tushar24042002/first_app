@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import {useAppContext} from '../../component/Contexts/Context';
 import {useNavigation} from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
 
 const Category = () => {
   const navigation = useNavigation();
@@ -20,9 +21,9 @@ const Category = () => {
     setProductSubCategory,
     productSubCategory,
   } = useAppContext();
-
+const dispatch = useDispatch();
   const [selectedCategory, setSelectedCategory] = useState({});
-
+const {category} = useSelector((state) => state);
   const handleCategoryClick = category => {
     setSelectedCategory(category);
   };
@@ -42,7 +43,11 @@ const Category = () => {
   }, [selectedCategory]);
 
   useEffect(() => {
-    getCategory(setProductCategory);
+    if (category == null || category?.category == null) {
+      getCategory(setProductCategory, dispatch);
+    } else {
+      setProductCategory(category?.category);
+    }
   }, []);
 
   const fetchSubCategoryData = async e => {

@@ -32,7 +32,6 @@ const SearchPage = ({navigation}) => {
   };
 
   const handleSearchClick = (id, content, name, type) => {
-    console.log(content, id);
     if (content === 'type') {
       navigation.navigate('products', {
         headerTitle: name,

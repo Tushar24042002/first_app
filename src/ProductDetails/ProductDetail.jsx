@@ -8,14 +8,16 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {ScrollView} from 'react-native';
 import {productDetails} from './ProductDetailsAction';
-import {addCart} from '../Cart/CartAction';
+import {addCart, getCart} from '../Cart/CartAction';
 import {useNavigation} from '@react-navigation/native';
+import {useAppContext} from '../../component/Contexts/Context';
+import {ALERT_TYPE, Toast} from 'react-native-alert-notification';
 
 const {width} = Dimensions.get('window');
 
 const ProductDetail = ({route}) => {
   const {id} = route.params;
-
+  const {setCart} = useAppContext();
   const [descModal, setDescModal] = useState(false);
   const descriptionRef = useRef(null);
   const [product, setProduct] = useState({});
@@ -31,7 +33,6 @@ const ProductDetail = ({route}) => {
   useEffect(() => {
     productDetails(id)
       .then(res => {
-        console.log('working', res.product);
         setProduct(res?.product);
       })
       .catch(err => console.log(err));
@@ -44,23 +45,43 @@ const ProductDetail = ({route}) => {
     };
     addCart(obj, navigation)
       .then(res => {
-        console.log(res);
+        if (res?.success) {
+          getCart(setCart);
+          Toast.show({
+            type: ALERT_TYPE.SUCCESS,
+            title: res?.message,
+          });
+        } else {
+          Toast.show({
+            type: ALERT_TYPE.DANGER,
+            title: 'Add to Cart Failed',
+            textBody: res?.error,
+          });
+        }
       })
       .catch(err => {
         console.log(err);
       });
   };
-
+  const discountPercentage = (((product?.mrp || 0) - product.price) / (product?.mrp || 1)) * 100;
   return (
     <View style={styles.container}>
       <ScrollView>
         <ImageCarousel images={product?.product_images} />
         <Text style={styles.productName}>{product?.name}</Text>
-        <Text style={styles.productPrice}>
-          {' '}
-          <FontAwesome name="rupee" size={18} color="black" />
-          {product?.price}
-        </Text>
+        <View style={styles.priceRow}>
+          <Text style={styles.productPrice}>
+            <FontAwesome name="rupee" size={18} color="black" />
+            {product?.price}
+          </Text>
+          <Text style={styles.productMrp}>
+            <FontAwesome name="rupee" size={18} color="gray" />
+            {product?.mrp || 0}
+          </Text>
+          <Text style={styles.discountPercentage}>
+            {discountPercentage.toFixed(2)}% OFF
+          </Text>
+        </View>
         <View style={styles.rating}>
           <Text style={{color: 'white', fontSize: 13, fontWeight: '500'}}>
             {1?.toFixed(1)} <Ionicons name="star" size={12} color="white" />
@@ -116,16 +137,18 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: 'white',
     height: '100%',
+    backgroundColor: '#fff',
   },
   title: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: 'bold',
     marginBottom: 5,
   },
   description: {
-    fontSize: 14,
+    fontSize: 12,
     lineHeight: 18,
     textAlign: 'justify',
+    marginBottom: 10,
   },
   readMore: {
     color: 'blue',
@@ -133,17 +156,36 @@ const styles = StyleSheet.create({
   },
   productName: {
     width: '100%',
-    fontSize: 16,
+    fontSize: 15,
     textTransform: 'capitalize',
     fontWeight: '600',
     marginBottom: 0,
     color: '#686868',
   },
-  productPrice: {
-    fontSize: 20,
-    color: 'black',
-    fontWeight: '700',
+  priceRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: 4,
+  },
+  productPrice: {
+    fontSize: 17,
+    fontWeight: 'bold',
+    marginRight: 10,
+  },
+  productMrp: {
+    fontSize: 15,
+    color: 'gray',
+    textDecorationLine: 'line-through',
+    marginRight: 10,
+  },
+  discountPercentage: {
+    backgroundColor: '#d4edda',
+    color: '#155724',
+    fontSize: 12,
+    paddingHorizontal : 10,
+    paddingVertical : 3,
+    borderRadius : 5
+
   },
   rating: {
     width: 56,
@@ -152,6 +194,7 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     paddingVertical: 4,
     borderRadius: 20,
+    marginBottom : 5
   },
   buttonContainer: {
     marginTop: 10,

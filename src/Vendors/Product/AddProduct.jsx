@@ -16,6 +16,7 @@ import {addProductFunction} from './AddProductAction';
 import RNPickerSelect from 'react-native-picker-select';
 import {getCategory, getSubCategory} from '../../Category/CategoryAction';
 import {useAppContext} from '../../../component/Contexts/Context';
+import { useSelector } from 'react-redux';
 
 const AddProduct = ({getProductInfo, data}) => {
   const [isLoginModal, setIsLoginModal] = useState(false);
@@ -29,7 +30,7 @@ const AddProduct = ({getProductInfo, data}) => {
   } = useAppContext();
   const [selectCategory, setSelectCategory] = useState([]);
   const [selectSubCategory, setSelectSubCategory] = useState([]);
-
+  const {category} = useSelector((state) => state);
   const [productInfo, setProductInfo] = useState({
     name: '',
     images: '',
@@ -43,7 +44,11 @@ const AddProduct = ({getProductInfo, data}) => {
   });
 
   useEffect(() => {
-    getCategory(setProductCategory);
+    if (category == null || category?.category == null) {
+      getCategory(setProductCategory, dispatch);
+    } else {
+      setProductCategory(category?.category);
+    }
   }, []);
 
   useEffect(() => {
@@ -78,12 +83,12 @@ const AddProduct = ({getProductInfo, data}) => {
 
   const handleSubmit = async () => {
     // Add your form submission logic here
-    console.log('Product Info:', productInfo);
     productInfo.images = images;
-    addProductFunction(productInfo);
+    addProductFunction(productInfo).then((res)=>{
+      console.log(res)
+    });
   };
   const handleImage = e => {
-    console.log('dsffg', e);
     setSelectedImage(e);
   };
 
@@ -92,7 +97,6 @@ const AddProduct = ({getProductInfo, data}) => {
     setImages(e => [...e, selectedImage]);
     setSelectedImage({});
   };
-  console.log(productInfo);
   // category change
   const handleChangeCategory = e => {
     setProductInfo(prev => ({

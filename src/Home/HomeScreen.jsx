@@ -19,6 +19,9 @@ import {useAppContext} from '../../component/Contexts/Context';
 import {getCart, getWishList} from '../Cart/CartAction';
 import {getCurrentUser} from '../CheckOut/CheckOutAction';
 import HorizontalProducts from './HorizontalProducts';
+import {userDetails} from '../Redux/action/userAction';
+import {useDispatch, useSelector} from 'react-redux';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const HomeScreen = ({route}) => {
   const [isLoginModal, setIsLoginModal] = useState(false);
@@ -33,24 +36,42 @@ const HomeScreen = ({route}) => {
   const {id} = route.params;
   const navigation = useNavigation();
   const bounceAnim = useRef(new Animated.Value(0)).current;
+  const {user, category} = useSelector(state => state);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     Animated.spring(bounceAnim, {
       toValue: 1,
       friction: 5,
-      useNativeDriver: true, // Using native driver for better performance
+      useNativeDriver: true,
     }).start();
   }, [bounceAnim]);
 
   useEffect(() => {
-    getCategory(setProductCategory);
+    console.log(user?.loginData , "ttrdxiuytrg")
+    if (user?.loginData != null && user?.loginData?.success === true &&  user?.loginData?.authToken != null) {
+      AsyncStorage.setItem('Authorization', user?.loginData?.authToken);
+    }
+
+    if (
+      category == null ||
+      category?.category === null ||
+      category?.category?.length === 0
+    ) {
+      getCategory(setProductCategory, dispatch);
+    } else {
+      setProductCategory(category?.category);
+    }
     getCart(setCart);
     getWishList(setWishlistData);
-    // checkLogin();
+    if (user?.user != null) {
+      setUserDetails(user?.user);
+    } else {
+      getCurrentUser(setUserDetails, dispatch);
+    }
   }, []);
 
   useEffect(() => {
-    console.log(id);
     if (id === 1) {
       setIsLoginModal(id === 1);
       setIsMenuOpen(false);
@@ -61,7 +82,6 @@ const HomeScreen = ({route}) => {
     setIsLoginModal(false);
     getCurrentUser(setUserDetails);
   };
-  console.log(isLoginModal);
   const renderCategoryItem = ({item}) => (
     <TouchableOpacity
       style={styles.categoryItem}
@@ -134,7 +154,7 @@ const styles = StyleSheet.create({
   },
   categoryItem: {
     marginRight: 10,
-    marginTop : 12,
+    marginTop: 12,
     alignItems: 'center',
   },
   imageContainer: {

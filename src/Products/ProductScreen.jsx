@@ -26,11 +26,9 @@ const ProductScreen = ({route}) => {
   const dispatch = useDispatch();
 
   const data = useSelector(state => state);
-  console.log('data', data);
 
   useEffect(() => {
     if (data.products?.length === 0) {
-      console.log("fetching")
       fetchDataFromAPI();
     }
     else{
@@ -62,13 +60,25 @@ const ProductScreen = ({route}) => {
       {/* </CustomModal> */}
 
       {products && (
-        <View style={{flex: 1, width: '100%'}}>
-          <TouchableOpacity
-            style={styles.filterButton}
-            onPress={() => setModalVisible(true)}>
-            <Text style={styles.filterButtonText}>Sorting & Filter</Text>
-          </TouchableOpacity>
-        </View>
+            <View style={styles.filterContainer}>
+      <View style={styles.leftSide}>
+        <TouchableOpacity style={styles.gridButton}>
+        <Ionicons name="grid" size={16} color="#ccc" />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.gridButton}>
+        <Ionicons name="menu" size={18} color="#ccc" />
+        </TouchableOpacity>
+      </View>
+      <TouchableOpacity
+        style={styles.filterButton}
+        onPress={() => setModalVisible(true)}
+      >
+        <Text style={styles.filterButtonText}>Filter</Text>
+      </TouchableOpacity>
+    </View>
+
+       
+      
       )}
       <View style={styles.productContainer}>
         {products &&
@@ -110,25 +120,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 0,
     paddingVertical: 0,
     flexDirection: 'column',
+    backgroundColor:"#fff"
   },
   productContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
     width: '100%',
-  },
-  filterButton: {
-    backgroundColor: 'blue',
-    padding: 6,
-    borderRadius: 10,
-    marginVertical: 10,
-    marginLeft: 20,
-    marginRight: 20,
-    alignItems: 'center',
-  },
-  filterButtonText: {
-    color: 'white',
-    fontSize: 16,
   },
   emptyContainer: {
     flex: 1,
@@ -139,6 +137,36 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#888',
     marginVertical: 10,
+  },
+
+
+
+  filterContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 10,
+    paddingTop : 5
+  },
+  leftSide: {
+    flexDirection: 'row',
+  },
+  gridButton: {
+    paddingHorizontal: 5,
+    backgroundColor: '#fff',
+    borderRadius: 5,
+    marginRight: 5,
+  },
+  filterButton: {
+    backgroundColor: '#fff',
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    borderRadius: 5,
+
+  },
+  filterButtonText: {
+    color: '#000',
+        fontWeight :"600"
   },
 });
 

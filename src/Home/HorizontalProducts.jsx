@@ -6,18 +6,18 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useDispatch, useSelector } from 'react-redux';
 import { allproducts } from '../Redux/action/productAction';
 import { fetchProducts } from '../Products/ProductAction';
+import { useNavigation } from '@react-navigation/native';
 
 
 
 const HorizontalProducts = () => {
+  const navigation = useNavigation();
     const dispatch = useDispatch();
     const [products, setProducts] = useState([]);
     const data = useSelector(state => state);
-    console.log('data', data);
   
     useEffect(() => {
-      if (data.products?.length === 0) {
-        console.log("fetching")
+      if (data.products?.products?.length === 0) {
         fetchDataFromAPI();
       }
       else{
@@ -37,12 +37,11 @@ const HorizontalProducts = () => {
         // Handle error
       }
     };
-    console.log(products)
   return (
     <View style={styles.container}>
     <View style={styles.header}>
         <Text style={styles.headerTitle}>Special Deals</Text>
-        <TouchableOpacity style={styles.headerButton}>
+        <TouchableOpacity style={styles.headerButton} onPress={()=> navigation.navigate('products', { headerTitle: 'Products' , type :"", category :"" })}>
           <Text style={styles.headerButtonText}>See All</Text>
           <Ionicons name="arrow-forward" size={16} color="#DC143C" />
         </TouchableOpacity>

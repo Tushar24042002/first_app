@@ -58,7 +58,7 @@ const ImageCarousel = ({ images, isThumbnailShow = true }) => {
           >
             <Image
               source={{ uri: image }}
-              style={{ width: "100%", height: 80, objectFit: "cover" }}
+              style={{ width: "100%", height: 60, aspectRatio : 1, objectFit: "cover" }}
               resizeMode="cover"
             />
           </TouchableOpacity>
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     overflow :"hidden",
     borderColor :"black",
     marginRight: 5.5,
-    width: width * 0.23, // Each thumbnail takes 25% of the screen width
+    width: 60, // Each thumbnail takes 25% of the screen width
   },
   lastThumbnail :{
     marginRight : 0

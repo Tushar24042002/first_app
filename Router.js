@@ -123,7 +123,7 @@ const Router = ({ props }) => {
           </Stack.Screen>
 
         </Stack.Navigator>
-        {routeName != "productsDetail" && routeName != "cart" && routeName != "userDetailsForm" && routeName != "Search" && routeName != "paymentsuccess" && <BottomNavBar />}
+        {routeName != "productsDetail" && routeName != "cart" && routeName != "userDetailsForm" && routeName != "Search" && routeName != "paymentsuccess" && <BottomNavBar activePage={routeName} />}
       </SideMenu>
     </NavigationContainer>
     // </SideMenu>

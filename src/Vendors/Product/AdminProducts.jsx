@@ -42,8 +42,6 @@ const AdminProducts = () => {
   };
 
   const handleEdit = (productId) => {
-    // Navigate to edit screen with the selected product id
-    console.log('Edit product with ID:', productId);
   };
 
   return (

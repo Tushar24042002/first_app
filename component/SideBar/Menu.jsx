@@ -10,22 +10,16 @@ import {
 } from 'react-native';
 import {loginStatus} from '../../src/Home/Login/LoginAction';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useSelector } from 'react-redux';
 
 const Menu = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigation = useNavigation();
-  const data = AsyncStorage.getItem('user');
-  console.log(data, "user data");
-  useEffect(() => {
-    loginStatus(navigation).then(res => {
-      console.log(res, 'dsfsdfsnfj');
-      setIsLoggedIn(res);
-    });
-  });
+  const {user} = useSelector((state)=>state);
+  console.log(user)
   return (
     <View style={menuStyles.container}>
       <View style={menuStyles.profileContainer}>
-        {isLoggedIn ? (
+        {true ? (
           <>
             <Image
               source={{uri: 'https://example.com/user-profile-image.jpg'}}
@@ -40,7 +34,7 @@ const Menu = () => {
           />
         )}
       </View>
-      {isLoggedIn ? (
+      {true ? (
         <>
           <TouchableOpacity
             onPress={() =>

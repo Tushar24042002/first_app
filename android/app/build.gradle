@@ -82,8 +82,8 @@ android {
         applicationId "com.dukan"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 13  
-        versionName "1.0.13"
+        versionCode 15 
+        versionName "1.0.15"
     }
     signingConfigs {
         release {
@@ -110,14 +110,26 @@ android {
             }
         }
         release {
+
+//             signingConfig signingConfigs.debug
+// minifyEnabled enableProguardInReleaseBuilds
+// proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+// ndk {
+// debugSymbolLevel 'FULL'
+// }
             // Caution! In production, you need to generate your own keystore file.
             // see https://reactnative.dev/docs/signed-apk-android.
             signingConfig signingConfigs.debug
-            minifyEnabled enableProguardInReleaseBuilds
-            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            minifyEnabled true
+             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+            // proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             ndk {
-                debugSymbolLevel 'FULL'
+                debugSymbolLevel 'NONE'
             }
+             project.ext.react = [
+                entryFile: "index.js",
+                enableHermes: true  // Enable Hermes
+            ]
         }
     }
 }

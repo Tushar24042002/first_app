@@ -11,10 +11,13 @@ import {getCurrentUser, handleCheckout, handleRazorPay} from './CheckOutAction';
 import {useAppContext} from '../../component/Contexts/Context';
 import RazorpayCheckout from 'react-native-razorpay';
 import {useNavigation} from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
 
 const UserDetailsForm = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const {cart, userDetails, setUserDetails} = useAppContext();
+  const {user} = useSelector((state)=>state?.user);
   // const [userDetails, setUserDetails] = useState({
   //   first_name: '',
   //   last_name: '',
@@ -27,10 +30,14 @@ const UserDetailsForm = () => {
   // });
 
   useEffect(() => {
-    console.log('get form');
-    getCurrentUser(setUserDetails);
+    if(user != null){
+      setUserDetails(user);
+    }
+    else{
+      getCurrentUser(setUserDetails, dispatch);
+    }
+
   }, []);
-  console.log(userDetails);
   const handleChange = (key, value) => {
     setUserDetails({
       ...userDetails,
@@ -45,7 +52,6 @@ const UserDetailsForm = () => {
         order_id: e.order_id,
       });
     });
-    console.log('end function', e);
   };
 
   const startPayment = data => {
@@ -78,15 +84,12 @@ const UserDetailsForm = () => {
 
   const handleSubmit = () => {
     handleCheckout(100, cart, userDetails).then(res => {
-      console.log(res, 'resp');
       startPayment(res?.razorpay_options);
     });
-    console.log(userDetails); // For demonstration, you can remove this line later
   };
-
+console.log(userDetails)
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>User Details Form</Text>
       <TextInput
         style={styles.input}
         placeholder="First Name"

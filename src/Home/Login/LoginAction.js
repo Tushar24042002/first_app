@@ -17,7 +17,6 @@ export const checkLogin = async (navigation) => {
     }
 
     const data = await response.json();
-    console.log(data, "ffdgfdgd");
     if(data.success !== true){
       navigation.navigate('home', { headerTitle: "Home", id: 1 })
     }
@@ -76,7 +75,6 @@ export const loginUser = async (username, password) => {
     }
 
     const data = await response.json();
-    console.log(data);
     return data;
   } catch (error) {
     throw new Error(`There was a problem with the fetch operation: ${error.message}`);
@@ -92,7 +90,6 @@ export const registerUser = async (username, email, password, phoneNumber) => {
       password: password,
       phoneNumber: phoneNumber
     };
-    console.log(requestBody);
     const response = await fetch('https://prediction.capitallooks.com/php_backend/Users/register.php', {
       method: 'POST',
       headers: {
@@ -106,7 +103,6 @@ export const registerUser = async (username, email, password, phoneNumber) => {
     }
 
     const data = await response.json();
-    console.log(data);
     return data;
   } catch (error) {
     throw new Error(`There was a problem with the fetch operation: ${error.message}`);

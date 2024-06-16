@@ -1,5 +1,4 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
 export const addProductFunction = async (data) => {
 
     const formData = new FormData();
@@ -24,20 +23,20 @@ export const addProductFunction = async (data) => {
         const token = await AsyncStorage.getItem('Authorization');
         const headers = {
             'Authorization': `${token}`, // Ensure the token is correctly formatted
-            // 'Content-Type': 'multipart/form-data' // Do not set Content-Type manually for FormData
+            'Content-Type': 'multipart/form-data' 
         };
 
         const response = await fetch('https://prediction.capitallooks.com/php_backend/products/add_product_mobile.php', {
-            method: 'POST',
             headers: headers,
             body: formData,
         });
-
+console.log(response)
         const responseData = await response.json();
         console.log(responseData)
-
+        return responseData;
         if (responseData.success) {
-            console.log(responseData);
+
+            
             // Alert.alert('Upload successful', responseData.message);
         } else {
             // Alert.alert('Upload failed', responseData.message);

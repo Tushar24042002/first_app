@@ -20,7 +20,6 @@ export const getCart = async (setCart) => {
     }
 
     const data = await response.json();
-    console.log(data);
     if (data?.success) {
       setCart(data?.cartItems)
     }
@@ -34,7 +33,6 @@ export const addCart = async (obj, navigation) => {
   try {
     // const token = checkLogin(navigation);
     const token = await AsyncStorage.getItem('Authorization');
-    console.log(token)
     const headers = {
       'Authorization': `${token}`,
       'Content-Type': 'application/json'
@@ -51,7 +49,6 @@ export const addCart = async (obj, navigation) => {
     }
 
     const data = await response.json();
-    console.log(data);
     return data;
   } catch (error) {
     console.error(`There was a problem with the fetch operation: ${error.message}`);
@@ -98,6 +95,34 @@ export const addWishlist = async (obj, navigation) => {
     };
 
     const response = await fetch('https://prediction.capitallooks.com/php_backend/wishlist/add_wishlist_items.php', {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify(obj) // Ensure the object is stringified
+    });
+
+    if (!response.ok) {
+      throw new Error(`Network response was not ok: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    throw new Error(`There was a problem with the fetch operation: ${error.message}`);
+  }
+};
+
+
+
+export const removeWishlist = async (obj) => {
+
+  try {
+    const token = await AsyncStorage.getItem('Authorization');
+    const headers = {
+      'Authorization': `${token}`,
+      'Content-Type': 'application/json'
+    };
+
+    const response = await fetch('https://prediction.capitallooks.com/php_backend/wishlist/delete_wishlist_item.php', {
       method: 'POST',
       headers: headers,
       body: JSON.stringify(obj) // Ensure the object is stringified

@@ -1,6 +1,8 @@
 // api.js
 
-export const getCategory = async setProductCategory => {
+import { allCategory } from "../Redux/action/categoryAction";
+
+export const getCategory = async (setProductCategory, dispatch) => {
   try {
     const response = await fetch(
       'https://prediction.capitallooks.com/php_backend/products/getProductTypes.php?action=getCartItems',
@@ -10,6 +12,7 @@ export const getCategory = async setProductCategory => {
     }
     const data = await response.json();
     if (data?.success) {
+      dispatch(allCategory(data?.productTypes))
       setProductCategory(data?.productTypes);
     }
   } catch (error) {

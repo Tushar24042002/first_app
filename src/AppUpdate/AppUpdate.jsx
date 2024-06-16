@@ -14,11 +14,9 @@ const AppUpdate = ({isModalVisible, setIsModalVisible}) => {
   const [url, setUrl] = useState('');
   useEffect(() => {
     fetchAppUpdate().then(res => {
-      console.log(res, 'data');
       if (res?.success) {
         let data = res?.update;
         setIsModalVisible(data?.version != DeviceInfo.getVersion());
-        console.log(typeof data?.update_url);
         setUrl(data?.update_url);
       }
     });
@@ -37,7 +35,6 @@ const AppUpdate = ({isModalVisible, setIsModalVisible}) => {
         animationType="slide"
         onRequestClose={() => {
           // handle back button press on Android
-          console.log('Modal has been closed.');
         }}>
         <View style={styles.modalBackground}>
           <View style={styles.modalContainer}>

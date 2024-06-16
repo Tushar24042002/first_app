@@ -1,5 +1,4 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useDispatch } from 'react-redux';
 import { userDetails } from '../Redux/action/userAction';
 
 export const handleCheckout = async (amount, cartArray, userDetails) => {
@@ -10,7 +9,6 @@ export const handleCheckout = async (amount, cartArray, userDetails) => {
       productDetails: JSON.stringify(cartArray),
       userDetails: JSON.stringify(userDetails),
     };
-    console.log(requestBody);
     const response = await fetch(
       'https://prediction.capitallooks.com/php_backend/payment/checkout.php',
       {
@@ -37,9 +35,10 @@ export const handleCheckout = async (amount, cartArray, userDetails) => {
   }
 };
 
-export const getCurrentUser = async setUserDetails => {
-  const dispatch = useDispatch();
+export const getCurrentUser = async (setUserDetails, dispatch) => {
+
   try {
+    console.log("working")
     const token = await AsyncStorage.getItem('Authorization');
     const headers = {
       Authorization: `${token}`,

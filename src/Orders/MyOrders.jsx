@@ -10,15 +10,27 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {getOrders} from './MyOrderAction';
+import { useSelector } from 'react-redux';
 
 const MyOrders = () => {
  const [orders, setOrders] = useState([]);
 
-  useEffect(() => {
+
+ const navigation = useNavigation();
+
+ const {user} = useSelector((state)=>state);
+ useEffect(() => {
+   if(user?.loginData == null ||  user?.loginData?.success === undefined){
+     navigation.navigate('home', { headerTitle: "Home", id: 1 })
+   }
+   else{
     getOrders().then(res => {
       setOrders(res?.orders);
     });
-  }, []);
+   }
+
+ }, []);
+
 
   const renderOrder = ({item}) => (
     <View style={styles.orderContainer}>
@@ -39,7 +51,6 @@ const MyOrders = () => {
   );
 
   const handleAddToCart = item => {
-    console.log('Add to cart:', item);
   };
 
   return (
@@ -47,7 +58,7 @@ const MyOrders = () => {
       {
         orders && orders.map((e, index)=>{
           return (
-            <React.Fragment>
+            <React.Fragment key={index}>
               <Text>{e.created_at}</Text>
     
             <FlatList

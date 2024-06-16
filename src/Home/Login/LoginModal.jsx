@@ -77,7 +77,6 @@ const dispatch = useDispatch();
             Toast.show({
               type: ALERT_TYPE.SUCCESS,
               title: 'Login Success',
-              // textBody: 'Registered Successfully',
             });
             handleLoginModal();
           }

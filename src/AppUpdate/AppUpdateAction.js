@@ -62,7 +62,6 @@ const requestStoragePermission = async () => {
         .then((res) => {
             setIsModalVisible(false);
             Alert.alert('Download Complete', 'APK has been downloaded successfully.');
-            console.log('The file saved to ', res.path());
         })
         .catch((error) => {
             console.error(error);
