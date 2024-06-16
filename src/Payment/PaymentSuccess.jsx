@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -9,33 +9,23 @@ import {
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {Icon, Button} from 'react-native-elements';
+import { getPaymentDetailsByOrderId } from './PaymentDetailsAction';
 
-const PaymentSuccess = () => {
+const PaymentSuccess = ({route}) => {
   const navigation = useNavigation();
+  const [data, setData] = useState({});
+  const {order_id} = route.params;
   // const route = useRoute();
-  var data = {
-    paymentId: 123,
-    orderId: 1234,
-    address: '123 Main St, Springfield, USA',
-    price: '$299.99',
-    products: [
-      {
-        id: 1,
-        name: 'Product 1',
-        quantity: 2,
-        price: '$100',
-        imageUrl: 'https://via.placeholder.com/100',
-      },
-      {
-        id: 2,
-        name: 'Product 2',
-        quantity: 1,
-        price: '$199.99',
-        imageUrl: 'https://via.placeholder.com/100',
-      },
-    ],
-  };
-  const {paymentId, orderId, address, price, products} = data; // Assuming these params are passed from the payment process
+
+
+useEffect(()=>{
+  getPaymentDetailsByOrderId(order_id).then((res)=>{
+    console.log(res)
+    setData(res);
+  })
+},[])
+
+
 
   const handleContinueShopping = () => {
     navigation.navigate('Home');
@@ -43,7 +33,7 @@ const PaymentSuccess = () => {
 
   const renderProduct = ({item}) => (
     <View style={styles.productContainer}>
-      <Image source={{uri: item.imageUrl}} style={styles.productImage} />
+      <Image source={{uri: item?.product_images}} style={styles.productImage} />
       <View style={styles.productDetails}>
         <Text style={styles.productName}>{item.name}</Text>
         <Text style={styles.productQuantity}>Quantity: {item.quantity}</Text>
@@ -67,23 +57,23 @@ const PaymentSuccess = () => {
         <Text style={styles.message}>Thank you for your purchase.</Text>
         <View style={styles.infoContainer}>
           <View style={styles.infoRow}>
-            <Icon name="id-card" type="font-awesome" color="#333" size={20} />
+            <Icon name="id-card" type="font-awesome" color="#333" size={16} />
             <View style={{flexDirection: 'row'}}>
               <Text style={[styles.detailText, styles.bold500]}>
                 {' '}
                 Payment ID:{' '}
               </Text>
-              <Text style={styles.detailText}>{paymentId}</Text>
+              <Text style={styles.detailText}>{data?.payment_id}</Text>
             </View>
           </View>
 
           <View style={styles.infoRow}>
-          <Icon name="barcode" type="font-awesome" color="#333" size={20} />
+          <Icon name="barcode" type="font-awesome" color="#333" size={16} />
             <View style={{flexDirection: 'row'}}>
               <Text style={[styles.detailText, styles.bold500]}>
               Order ID: 
               </Text>
-              <Text style={styles.detailText}>{orderId}</Text>
+              <Text style={styles.detailText}>{order_id}</Text>
             </View>
           </View>
 
@@ -92,34 +82,34 @@ const PaymentSuccess = () => {
               name="map-marker"
               type="font-awesome"
               color="#333"
-              size={20}
+              size={16}
             />
             <View style={{flexDirection: 'row'}}>
               <Text style={[styles.detailText, styles.bold500]}>
                 {' '}
                 Delivery Address: 
               </Text>
-              <Text style={styles.detailText}>{address}</Text>
+              <Text style={styles.detailText}>{`${data?.address?.address_value} ${data?.address?.state} ${data?.address?.pincode}`}</Text>
             </View>
           </View>
 
           <View style={styles.infoRow}>
-          <Icon name="dollar" type="font-awesome" color="#333" size={20} />
+          <Icon name="rupee" type="font-awesome" color="#333" size={16} />
             <View style={{flexDirection: 'row'}}>
               <Text style={[styles.detailText, styles.bold500]}>
                 {' '}
                 Total Price: 
               </Text>
-              <Text style={styles.detailText}>{price}</Text>
+              <Text style={styles.detailText}>{data?.order?.amount}</Text>
             </View>
           </View>
 
         </View>
         <Text style={styles.sectionTitle}>Order Products</Text>
         <FlatList
-          data={products}
+          data={data?.order?.cart_details}
           renderItem={renderProduct}
-          keyExtractor={item => item.id.toString()}
+          keyExtractor={item => item?.product_id.toString()}
         />
       </ScrollView>
       <View style={styles.buttonContainer}>
@@ -168,15 +158,15 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   detailText: {
-    fontSize: 14,
+    fontSize: 12,
     color: '#333',
-    marginLeft: 10,
+    marginLeft: 6,
   },
   bold500: {
     fontWeight: 'bold',
   },
   sectionTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 'bold',
     color: '#333',
     marginTop: 0,
@@ -191,24 +181,24 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   productImage: {
-    width: 60,
-    height: 60,
+    width: 55,
+    height: 55,
     marginRight: 10,
   },
   productDetails: {
     flex: 1,
   },
   productName: {
-    fontSize: 16,
+    fontSize: 14,
     color: '#333',
-    marginBottom: 5,
+    marginBottom: 3,
   },
   productQuantity: {
-    fontSize: 14,
+    fontSize: 12,
     color: '#555',
   },
   productPrice: {
-    fontSize: 14,
+    fontSize: 12,
     color: '#555',
   },
   buttonContainer: {

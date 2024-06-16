@@ -7,11 +7,11 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 const ProductComponent = ({ product, onEdit }) => {
   return (
     <View style={styles.container}>
-      <Image source={{ uri: product.image }} style={styles.image} />
+      <Image source={{ uri: product?.product_images && product?.product_images[0] }} style={styles.image} />
       <View style={styles.detailsContainer}>
         <Text style={styles.name}>{product.name}</Text>
-        <Text style={styles.type}>{product.type}</Text>
-        <Text style={styles.subType}>{product.subType}</Text>
+        <Text style={styles.type}>{product?.product_type?.name}</Text>
+        <Text style={styles.subType}>{product?.product_category?.name}</Text>
       </View>
       <TouchableOpacity onPress={() => onEdit(product.id)} style={styles.editIcon}>
         <Ionicons name="pencil" size={24} color="blue" />

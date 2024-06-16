@@ -17,6 +17,8 @@ import RNPickerSelect from 'react-native-picker-select';
 import {getCategory, getSubCategory} from '../../Category/CategoryAction';
 import {useAppContext} from '../../../component/Contexts/Context';
 import { useSelector } from 'react-redux';
+import { ALERT_TYPE, Toast } from 'react-native-alert-notification';
+import { useNavigation } from '@react-navigation/native';
 
 const AddProduct = ({getProductInfo, data}) => {
   const [isLoginModal, setIsLoginModal] = useState(false);
@@ -35,6 +37,7 @@ const AddProduct = ({getProductInfo, data}) => {
     name: '',
     images: '',
     price: '',
+    mrp :null,
     rating: '',
     category: null,
     type: null,
@@ -42,7 +45,7 @@ const AddProduct = ({getProductInfo, data}) => {
     author: '',
     brand: '',
   });
-
+const navigation = useNavigation();
   useEffect(() => {
     if (category == null || category?.category == null) {
       getCategory(setProductCategory, dispatch);
@@ -85,7 +88,23 @@ const AddProduct = ({getProductInfo, data}) => {
     // Add your form submission logic here
     productInfo.images = images;
     addProductFunction(productInfo).then((res)=>{
-      console.log(res)
+      if (res?.success) {
+       
+        Toast.show({
+          type: ALERT_TYPE.SUCCESS,
+          title: res?.message,
+        });
+        navigation.navigate('admindashboard', {
+          headerTitle: 'Admin Dashboard',
+        })
+
+      } else {
+        Toast.show({
+          type: ALERT_TYPE.DANGER,
+          title: 'Add to Cart Failed',
+          textBody: res?.error,
+        });
+      }
     });
   };
   const handleImage = e => {
@@ -136,6 +155,13 @@ const AddProduct = ({getProductInfo, data}) => {
           onChangeText={text => handleOnChange('price', text)}
           value={productInfo.price}
           placeholder="Enter Price"
+          keyboardType="numeric"
+        />
+         <TextInput
+          style={styles.input}
+          onChangeText={text => handleOnChange('mrp', text)}
+          value={productInfo.mrp}
+          placeholder="Enter Mrp"
           keyboardType="numeric"
         />
         <TextInput

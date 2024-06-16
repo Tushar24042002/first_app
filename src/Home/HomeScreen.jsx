@@ -48,7 +48,6 @@ const HomeScreen = ({route}) => {
   }, [bounceAnim]);
 
   useEffect(() => {
-    console.log(user?.loginData , "ttrdxiuytrg")
     if (user?.loginData != null && user?.loginData?.success === true &&  user?.loginData?.authToken != null) {
       AsyncStorage.setItem('Authorization', user?.loginData?.authToken);
     }

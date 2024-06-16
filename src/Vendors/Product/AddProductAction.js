@@ -14,6 +14,7 @@ export const addProductFunction = async (data) => {
     // Adding other product details (example)
     formData.append('name', data?.name);
     formData.append('price', data?.price);
+    formData.append('mrp', data?.mrp);
     formData.append('rating', Number(data?.rating));
     formData.append('category', data?.category);
     formData.append('type', data?.type);
@@ -27,6 +28,7 @@ export const addProductFunction = async (data) => {
         };
 
         const response = await fetch('https://prediction.capitallooks.com/php_backend/products/add_product_mobile.php', {
+            method: 'POST',
             headers: headers,
             body: formData,
         });
@@ -34,14 +36,6 @@ console.log(response)
         const responseData = await response.json();
         console.log(responseData)
         return responseData;
-        if (responseData.success) {
-
-            
-            // Alert.alert('Upload successful', responseData.message);
-        } else {
-            // Alert.alert('Upload failed', responseData.message);
-            console.log("Upload failed:", responseData.message);
-        }
     } catch (error) {
         console.error('Upload Error:', error);
         Alert.alert('Upload failed', 'There was an error uploading your images.');

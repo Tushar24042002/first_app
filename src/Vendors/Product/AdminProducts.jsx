@@ -4,46 +4,42 @@ import React, { useEffect, useState } from 'react';
 import { View, FlatList, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import ProductComponent from './ProductComponent';
 import { useNavigation } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
+import { allproducts } from '../../Redux/action/productAction';
 
 const AdminProducts = () => {
-  const [products, setProducts] = useState([]);
   const navigation = useNavigation();
 
+  const [products, setProducts] = useState([]);
+  const data = useSelector(state => state);
+
   useEffect(() => {
-    fetchAllProducts();
+    if (data.products?.products?.length === 0) {
+      fetchAllProducts();
+    }
+    else{
+      setProducts(data?.products?.products);
+    }
   }, []);
 
-  const fetchAllProducts = async () => {
-    const mockProducts = [
-      {
-        id: 1,
-        name: 'Product 1',
-        image: 'https://via.placeholder.com/150',
-        type: 'Type 1',
-        subType: 'Subtype 1',
-      },
-      {
-        id: 2,
-        name: 'Product 2',
-        image: 'https://via.placeholder.com/150',
-        type: 'Type 2',
-        subType: 'Subtype 2',
-      },
-      {
-        id: 3,
-        name: 'Product 3',
-        image: 'https://via.placeholder.com/150',
-        type: 'Type 3',
-        subType: 'Subtype 3',
-      },
-    ];
 
-    setProducts(mockProducts);
+  const fetchAllProducts = async () => {
+    try {
+      const result = await fetchProducts("", "");
+      dispatch(allproducts(result?.products));
+      setProducts(result?.products);
+      setStaticProducts(result?.products);
+    } catch (error) {
+      console.log(error);
+      // Handle error
+    }
   };
+
+ 
 
   const handleEdit = (productId) => {
   };
-
+console.log(products)
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.addButton} onPress={()=>navigation.navigate("addProduct")}>

@@ -8,18 +8,16 @@ import {
   Image,
   Button,
 } from 'react-native';
-import {loginStatus} from '../../src/Home/Login/LoginAction';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSelector } from 'react-redux';
 
 const Menu = () => {
   const navigation = useNavigation();
   const {user} = useSelector((state)=>state);
-  console.log(user)
+  console.log(user, "dsfsgfdg")
   return (
     <View style={menuStyles.container}>
       <View style={menuStyles.profileContainer}>
-        {true ? (
+        {user && user?.loginData?.success ? (
           <>
             <Image
               source={{uri: 'https://example.com/user-profile-image.jpg'}}
@@ -34,7 +32,7 @@ const Menu = () => {
           />
         )}
       </View>
-      {true ? (
+      {user?.loginData?.role === "ADMIN" ? (
         <>
           <TouchableOpacity
             onPress={() =>
@@ -44,7 +42,7 @@ const Menu = () => {
             }>
             <Text style={menuStyles.item}>Admin Dashboard</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => alert('Menu Item 2 pressed')}>
+          <TouchableOpacity>
             <Text style={menuStyles.item}>Menu Item 2</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => alert('Menu Item 3 pressed')}>
