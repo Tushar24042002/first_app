@@ -1,4 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import fetchWrapper from "../../Api/fetchWrapper";
 export const addProductFunction = async (data) => {
 
     const formData = new FormData();
@@ -27,14 +28,12 @@ export const addProductFunction = async (data) => {
             'Content-Type': 'multipart/form-data' 
         };
 
-        const response = await fetch('https://prediction.capitallooks.com/php_backend/products/add_product_mobile.php', {
+        const response = await fetchWrapper('https://prediction.capitallooks.com/php_backend/products/add_product_mobile.php', {
             method: 'POST',
             headers: headers,
             body: formData,
         });
-console.log(response)
         const responseData = await response.json();
-        console.log(responseData)
         return responseData;
     } catch (error) {
         console.error('Upload Error:', error);

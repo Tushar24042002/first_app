@@ -1,5 +1,7 @@
 // api.js
 
+import fetchWrapper from "../Api/fetchWrapper";
+
 export const fetchProducts = async (type, category) => {
   let smallType = type ? type.toLowerCase() : '';
   let url = 'https://prediction.capitallooks.com/php_backend/products/get_all_product.php';
@@ -12,7 +14,7 @@ export const fetchProducts = async (type, category) => {
   }
 
   try {
-    const response = await fetch(url);
+    const response = await fetchWrapper(url);
 
     if (!response.ok) {
       throw new Error('Network response was not ok');
@@ -28,7 +30,7 @@ export const fetchProducts = async (type, category) => {
 
 export const fetchProductById = async e => {
   try {
-    const response = await fetch(
+    const response = await fetchWrapper(
       `https://prediction.capitallooks.com/php_backend/products/getProductCategory.php?product_type=${e}`,
     );
     if (!response.ok) {

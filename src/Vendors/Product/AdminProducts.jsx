@@ -38,8 +38,8 @@ const AdminProducts = () => {
  
 
   const handleEdit = (productId) => {
+    navigation.navigate('addProduct',{ productId: productId}) ;
   };
-console.log(products)
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.addButton} onPress={()=>navigation.navigate("addProduct")}>

@@ -207,8 +207,8 @@ const styles = StyleSheet.create({
   },
   bottomButton: {
     backgroundColor: 'blue',
-    borderRadius: 5,
-    paddingVertical: 12,
+    borderRadius: 3,
+    paddingVertical: 8,
     alignItems: 'center',
   },
   buttonText: {

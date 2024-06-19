@@ -1,11 +1,12 @@
 import { PermissionsAndroid, Platform } from "react-native";
 import RNFetchBlob from "rn-fetch-blob";
+import fetchWrapper from "../Api/fetchWrapper";
 
 export const fetchAppUpdate = async () => {
     let url = 'https://prediction.capitallooks.com/php_backend/app/app_update.php';
 
     try {
-        const response = await fetch(url);
+        const response = await fetchWrapper(url);
 
         if (!response.ok) {
             throw new Error('Network response was not ok');

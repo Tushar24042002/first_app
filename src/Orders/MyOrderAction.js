@@ -1,4 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import fetchWrapper from "../Api/fetchWrapper";
 
 export const getOrders = async () => {
     try {
@@ -7,7 +8,7 @@ export const getOrders = async () => {
         'Authorization': `${token}`,
         'Content-Type': 'application/json', // Optional, adjust as needed
       };
-      const response = await fetch('https://prediction.capitallooks.com/php_backend/Orders/get_all_order_user_id.php', {
+      const response = await fetchWrapper('https://prediction.capitallooks.com/php_backend/Orders/get_all_order_user_id.php', {
         method: 'GET',
         headers: headers,
       });

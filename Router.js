@@ -22,15 +22,19 @@ import AuthNavigation from './component/Auth/AuthNavigation';
 import AdminDashboard from './src/Vendors/Dashboard/AdminDashboard';
 import PaymentSuccess from './src/Payment/PaymentSuccess';
 import AdminProducts from './src/Vendors/Product/AdminProducts';
+import fetchingManager from './src/Api/FetchingManager';
 
 const Stack = createStackNavigator();
 
-const Router = ({ props }) => {
+const Router = ({ setIsLoading }) => {
 
   const { isMenuOpen, setIsMenuOpen } = useAppContext();
   const menu = <Menu />;
   const [routeName, setRouteName] = useState("home");
 
+  useEffect(()=>{
+    setIsLoading(true);
+  },[routeName])
 
   return (
 

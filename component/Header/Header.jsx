@@ -389,14 +389,14 @@ const styles = StyleSheet.create({
     top: -5,
     backgroundColor: 'red',
     borderRadius: 10,
-    width: 20,
-    height: 20,
+    width: 18,
+    height: 18,
     justifyContent: 'center',
     alignItems: 'center',
   },
   badgeText: {
     color: 'white',
-    fontSize: 12,
+    fontSize: 10,
     fontWeight: 'bold',
   },
 });

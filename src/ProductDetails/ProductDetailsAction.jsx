@@ -1,6 +1,8 @@
+import fetchWrapper from "../Api/fetchWrapper";
+
 export const productDetails = async (id) => {
     try {
-      const response = await fetch(`https://prediction.capitallooks.com/php_backend/products/get_peoduct_by_id.php?id=${id}`);
+      const response = await fetchWrapper(`https://prediction.capitallooks.com/php_backend/products/get_peoduct_by_id.php?id=${id}`);
   
       if (!response.ok) {
         throw new Error('Network response was not ok');

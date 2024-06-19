@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import {getOrders} from './MyOrderAction';
 import { useSelector } from 'react-redux';
+import fetchingManager from '../Api/FetchingManager';
 
 const MyOrders = () => {
  const [orders, setOrders] = useState([]);
@@ -30,6 +31,9 @@ const MyOrders = () => {
    }
 
  }, []);
+
+
+
 
 
   const renderOrder = ({item}) => (

@@ -12,6 +12,7 @@ import {addCart, getCart} from '../Cart/CartAction';
 import {useNavigation} from '@react-navigation/native';
 import {useAppContext} from '../../component/Contexts/Context';
 import {ALERT_TYPE, Toast} from 'react-native-alert-notification';
+import { useSelector } from 'react-redux';
 
 const {width} = Dimensions.get('window');
 
@@ -22,6 +23,8 @@ const ProductDetail = ({route}) => {
   const descriptionRef = useRef(null);
   const [product, setProduct] = useState({});
   const navigation = useNavigation();
+  const { loginData } = useSelector((state) =>state?.user);
+ 
   const handleOpenDescModal = () => {
     setDescModal(true);
   };
@@ -119,7 +122,7 @@ const ProductDetail = ({route}) => {
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => addToCart(product?.id)}>
+          onPress={() => { loginData?.success ? addToCart(product?.id) :  navigation.navigate('home', { headerTitle: "Home", id: 1 })}}>
           <Text style={styles.buttonText}>Add to Cart</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button}>
@@ -200,7 +203,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: 10,
+    paddingHorizontal: 0,
     paddingVertical: 10,
     backgroundColor: '#fff',
     borderTopWidth: 1,
@@ -209,7 +212,7 @@ const styles = StyleSheet.create({
   },
   button: {
     // flex: 1,
-    width: '50%',
+    width: width/2 - 15,
     backgroundColor: 'blue',
     borderRadius: 5,
     paddingVertical: 12,

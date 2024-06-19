@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { checkLogin } from '../Home/Login/LoginAction';
+import fetchWrapper from '../Api/fetchWrapper';
 
 
 
@@ -10,7 +11,7 @@ export const getCart = async (setCart) => {
       'Authorization': `${token}`,
       'Content-Type': 'application/json', // Optional, adjust as needed
     };
-    const response = await fetch('https://prediction.capitallooks.com/php_backend/carts/get_cart_items.php?action=getCartItems', {
+    const response = await fetchWrapper('https://prediction.capitallooks.com/php_backend/carts/get_cart_items.php?action=getCartItems', {
       method: 'GET',
       headers: headers,
     });
@@ -38,7 +39,7 @@ export const addCart = async (obj, navigation) => {
       'Content-Type': 'application/json'
     };
 
-    const response = await fetch('https://prediction.capitallooks.com/php_backend/carts/add_cart_items.php', {
+    const response = await fetchWrapper('https://prediction.capitallooks.com/php_backend/carts/add_cart_items.php', {
       method: 'POST',
       headers: headers,
       body: JSON.stringify(obj) // Ensure the object is stringified
@@ -65,7 +66,7 @@ export const getWishList = async (setWishlistData) => {
       'Authorization': `${token}`,
       'Content-Type': 'application/json', // Optional, adjust as needed
     };
-    const response = await fetch('https://prediction.capitallooks.com/php_backend/wishlist/get_wishlist_items.php?action=getWishlistItems', {
+    const response = await fetchWrapper('https://prediction.capitallooks.com/php_backend/wishlist/get_wishlist_items.php?action=getWishlistItems', {
       method: 'GET',
       headers: headers,
     });
@@ -94,7 +95,7 @@ export const addWishlist = async (obj, navigation) => {
       'Content-Type': 'application/json'
     };
 
-    const response = await fetch('https://prediction.capitallooks.com/php_backend/wishlist/add_wishlist_items.php', {
+    const response = await fetchWrapper('https://prediction.capitallooks.com/php_backend/wishlist/add_wishlist_items.php', {
       method: 'POST',
       headers: headers,
       body: JSON.stringify(obj) // Ensure the object is stringified
@@ -122,7 +123,7 @@ export const removeWishlist = async (obj) => {
       'Content-Type': 'application/json'
     };
 
-    const response = await fetch('https://prediction.capitallooks.com/php_backend/wishlist/delete_wishlist_item.php', {
+    const response = await fetchWrapper('https://prediction.capitallooks.com/php_backend/wishlist/delete_wishlist_item.php', {
       method: 'POST',
       headers: headers,
       body: JSON.stringify(obj) // Ensure the object is stringified

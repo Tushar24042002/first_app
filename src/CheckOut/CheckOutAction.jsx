@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { userDetails } from '../Redux/action/userAction';
+import fetchWrapper from '../Api/fetchWrapper';
 
 export const handleCheckout = async (amount, cartArray, userDetails) => {
   try {
@@ -9,7 +10,7 @@ export const handleCheckout = async (amount, cartArray, userDetails) => {
       productDetails: JSON.stringify(cartArray),
       userDetails: JSON.stringify(userDetails),
     };
-    const response = await fetch(
+    const response = await fetchWrapper(
       'https://prediction.capitallooks.com/php_backend/payment/checkout.php',
       {
         method: 'POST',
@@ -44,7 +45,7 @@ export const getCurrentUser = async (setUserDetails, dispatch) => {
       Authorization: `${token}`,
       'Content-Type': 'application/json', // Optional, adjust as needed
     };
-    const response = await fetch(
+    const response = await fetchWrapper(
       'https://prediction.capitallooks.com/php_backend/Users/get_user_by_id.php',
       {
         method: 'GET',
@@ -75,7 +76,7 @@ export const handleRazorPay = async paymentData => {
   try {
     const token = await AsyncStorage.getItem('Authorization');
     const requestBody = JSON.stringify(paymentData);
-    const response = await fetch(
+    const response = await fetchWrapper(
       'https://prediction.capitallooks.com/php_backend/payment/razorpay_payment.php',
       {
         method: 'POST',

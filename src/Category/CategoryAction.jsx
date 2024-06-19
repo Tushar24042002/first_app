@@ -1,10 +1,11 @@
 // api.js
 
+import fetchWrapper from "../Api/fetchWrapper";
 import { allCategory } from "../Redux/action/categoryAction";
 
 export const getCategory = async (setProductCategory, dispatch) => {
   try {
-    const response = await fetch(
+    const response = await fetchWrapper(
       'https://prediction.capitallooks.com/php_backend/products/getProductTypes.php?action=getCartItems',
     );
     if (!response.ok) {
@@ -23,7 +24,7 @@ export const getCategory = async (setProductCategory, dispatch) => {
 };
 export const getSubCategory = async (setProductSubCategory , e) => {
   try {
-    const response = await fetch(
+    const response = await fetchWrapper(
       `https://prediction.capitallooks.com/php_backend/products/getProductCategory.php?product_type_id=${e}`,
     );
     if (!response.ok) {

@@ -11,8 +11,9 @@ export const Context = ({ children }) => {
   const [productSubCategory, setProductSubCategory] = useState([]);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [userDetails , setUserDetails] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
   return (
-    <ContextFunction.Provider value={{ cart, setCart, wishlistData, setWishlistData , productCategory, setProductCategory, productSubCategory, setProductSubCategory, isMenuOpen, setIsMenuOpen , userDetails, setUserDetails }}>
+    <ContextFunction.Provider value={{ cart, setCart, wishlistData, setWishlistData , productCategory, setProductCategory, productSubCategory, setProductSubCategory, isMenuOpen, setIsMenuOpen , userDetails, setUserDetails, isLoading, setIsLoading }}>
       {children}
     </ContextFunction.Provider>
   );

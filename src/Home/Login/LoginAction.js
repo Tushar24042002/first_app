@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import fetchWrapper from '../../Api/fetchWrapper';
 export const checkLogin = async (navigation) => {
   try {
     const token = await AsyncStorage.getItem('Authorization');
@@ -7,7 +8,7 @@ export const checkLogin = async (navigation) => {
       'Content-Type': 'application/json' // Adjust content type if needed
     };
 
-    const response = await fetch('https://prediction.capitallooks.com/php_backend/config/checkToken.php', {
+    const response = await fetchWrapper('https://prediction.capitallooks.com/php_backend/config/checkToken.php', {
       method: 'GET', // or 'POST' or any other HTTP method
       headers: headers // Pass the headers object
     });
@@ -35,7 +36,7 @@ export const loginStatus = async () => {
       'Content-Type': 'application/json' // Adjust content type if needed
     };
 
-    const response = await fetch('https://prediction.capitallooks.com/php_backend/config/checkToken.php', {
+    const response = await fetchWrapper('https://prediction.capitallooks.com/php_backend/config/checkToken.php', {
       method: 'GET', // or 'POST' or any other HTTP method
       headers: headers // Pass the headers object
     });
@@ -62,7 +63,7 @@ export const loginUser = async (username, password) => {
       password: password
     };
 
-    const response = await fetch('https://prediction.capitallooks.com/php_backend/Users/login.php', {
+    const response = await fetchWrapper('https://prediction.capitallooks.com/php_backend/Users/login.php', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -90,7 +91,7 @@ export const registerUser = async (username, email, password, phoneNumber) => {
       password: password,
       phoneNumber: phoneNumber
     };
-    const response = await fetch('https://prediction.capitallooks.com/php_backend/Users/register.php', {
+    const response = await fetchWrapper('https://prediction.capitallooks.com/php_backend/Users/register.php', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

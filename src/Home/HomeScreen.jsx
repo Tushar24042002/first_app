@@ -74,6 +74,8 @@ const HomeScreen = ({route}) => {
     if (id === 1) {
       setIsLoginModal(id === 1);
       setIsMenuOpen(false);
+      setCart([]);
+      setWishlistData([]);
     }
   }, [route]);
 

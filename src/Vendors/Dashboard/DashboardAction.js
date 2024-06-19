@@ -1,4 +1,5 @@
   import AsyncStorage from "@react-native-async-storage/async-storage";
+import fetchWrapper from "../../Api/fetchWrapper";
 
 export const getDashboardData = async () => {
     try {
@@ -7,7 +8,7 @@ export const getDashboardData = async () => {
         'Authorization': `${token}`,
         'Content-Type': 'application/json', // Optional, adjust as needed
       };
-      const response = await fetch('https://prediction.capitallooks.com/php_backend/admin_dashboard/dashboard.php', {
+      const response = await fetchWrapper('https://prediction.capitallooks.com/php_backend/admin_dashboard/dashboard.php', {
         method: 'GET',
         headers: headers,
       });

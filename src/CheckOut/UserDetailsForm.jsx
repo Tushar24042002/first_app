@@ -1,43 +1,27 @@
-import React, {useEffect, useState} from 'react';
-import {
-  View,
-  TextInput,
-  Button,
-  Text,
-  StyleSheet,
-  ScrollView,
-} from 'react-native';
-import {getCurrentUser, handleCheckout, handleRazorPay} from './CheckOutAction';
-import {useAppContext} from '../../component/Contexts/Context';
+import React, { useEffect } from 'react';
+import { View, TextInput, Button, StyleSheet, ScrollView } from 'react-native';
+import { getCurrentUser, handleCheckout, handleRazorPay } from './CheckOutAction';
+import { useAppContext } from '../../component/Contexts/Context';
 import RazorpayCheckout from 'react-native-razorpay';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 
 const UserDetailsForm = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const {cart, userDetails, setUserDetails} = useAppContext();
-  const {user} = useSelector((state)=>state?.user);
-  // const [userDetails, setUserDetails] = useState({
-  //   first_name: '',
-  //   last_name: '',
-  //   mobile: '',
-  //   email: '',
-  //   address_value: '',
-  //   pincode: '',
-  //   city: '',
-  //   state: '',
-  // });
+  const { cart, userDetails, setUserDetails } = useAppContext();
+  const { user } = useSelector((state) => state);
 
+  // Fetch current user details on component mount
   useEffect(() => {
-    if(user != null){
+    if (user != null && Object.keys(user).length === 0) {
       setUserDetails(user);
-    }
-    else{
+    } else {
       getCurrentUser(setUserDetails, dispatch);
     }
-
   }, []);
+
+  // Update user details state onChange
   const handleChange = (key, value) => {
     setUserDetails({
       ...userDetails,
@@ -45,8 +29,9 @@ const UserDetailsForm = () => {
     });
   };
 
-  const setPaymentData = e => {
-    handleRazorPay(e).then(res => {
+  // Handle payment response from Razorpay
+  const setPaymentData = (e) => {
+    handleRazorPay(e).then((res) => {
       navigation.navigate('paymentsuccess', {
         headerTitle: res?.message,
         order_id: e.order_id,
@@ -54,7 +39,8 @@ const UserDetailsForm = () => {
     });
   };
 
-  const startPayment = data => {
+  // Start Razorpay payment process
+  const startPayment = (data) => {
     var options = {
       description: data?.description,
       image: 'https://i.imgur.com/3g7nmJC.jpg',
@@ -68,81 +54,84 @@ const UserDetailsForm = () => {
         contact: data?.prefill?.contact,
         name: data?.prefill?.name,
       },
-      theme: {color: 'blue'},
+      theme: { color: 'blue' }, // Customize button color here
     };
     RazorpayCheckout.open(options)
-      .then(e => {
+      .then((e) => {
         e.order_id = data?.order_id;
         setPaymentData(e);
-        // alert(`Success: ${e.razorpay_payment_id}`);
       })
-      .catch(error => {
-        // handle failure
+      .catch((error) => {
         alert(`Error: ${error.code} | ${error.description}`);
       });
   };
 
+  // Handle form submission (checkout process)
   const handleSubmit = () => {
-    handleCheckout(100, cart, userDetails).then(res => {
+    handleCheckout(100, cart, userDetails).then((res) => {
       startPayment(res?.razorpay_options);
     });
   };
-console.log(userDetails)
+
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <TextInput
-        style={styles.input}
-        placeholder="First Name"
-        value={userDetails.first_name}
-        onChangeText={text => handleChange('first_name', text)}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Last Name"
-        value={userDetails.last_name}
-        onChangeText={text => handleChange('last_name', text)}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Mobile"
-        value={userDetails.mobile}
-        onChangeText={text => handleChange('mobile', text)}
-        keyboardType="phone-pad"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        value={userDetails.email}
-        onChangeText={text => handleChange('email', text)}
-        keyboardType="email-address"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Address"
-        value={userDetails.address_value}
-        onChangeText={text => handleChange('address_value', text)}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Pincode"
-        value={userDetails.pincode}
-        onChangeText={text => handleChange('pincode', text)}
-        keyboardType="numeric"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="City"
-        value={userDetails.city}
-        onChangeText={text => handleChange('city', text)}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="State"
-        value={userDetails.state}
-        onChangeText={text => handleChange('state', text)}
-      />
-      <Button title="Submit" onPress={handleSubmit} />
-    </ScrollView>
+    <View style={{ flex: 1 }}>
+      <ScrollView contentContainerStyle={styles.container}>
+        <TextInput
+          style={styles.input}
+          placeholder="First Name"
+          value={userDetails.first_name}
+          onChangeText={(text) => handleChange('first_name', text)}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Last Name"
+          value={userDetails.last_name}
+          onChangeText={(text) => handleChange('last_name', text)}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Mobile"
+          value={userDetails.mobile}
+          onChangeText={(text) => handleChange('mobile', text)}
+          keyboardType="phone-pad"
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Email"
+          value={userDetails.email}
+          onChangeText={(text) => handleChange('email', text)}
+          keyboardType="email-address"
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Address"
+          value={userDetails.address_value}
+          onChangeText={(text) => handleChange('address_value', text)}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Pincode"
+          value={userDetails.pincode}
+          onChangeText={(text) => handleChange('pincode', text)}
+          keyboardType="numeric"
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="City"
+          value={userDetails.city}
+          onChangeText={(text) => handleChange('city', text)}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="State"
+          value={userDetails.state}
+          onChangeText={(text) => handleChange('state', text)}
+        />
+      </ScrollView>
+      <View style={styles.buttonContainer}>
+        <Button title="Submit" onPress={handleSubmit} color="blue" />
+      </View>
+    </View>
   );
 };
 
@@ -151,12 +140,6 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     padding: 16,
     backgroundColor: '#f7f7f7',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 16,
-    textAlign: 'center',
   },
   input: {
     height: 40,
@@ -167,6 +150,28 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     backgroundColor: '#fff',
   },
+  buttonContainer: {
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    backgroundColor: '#fff',
+    borderTopWidth: 1,
+    borderTopColor: '#ccc',
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+  },
+  bottomButton: {
+    backgroundColor: 'blue',
+    borderRadius: 5,
+    paddingVertical: 12,
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+
 });
 
 export default UserDetailsForm;
